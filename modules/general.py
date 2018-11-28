@@ -34,6 +34,8 @@ class GeneralCommands:
 
                 base.paste(tint, (0, 0), tint)
 
+                frames.append(base)
+
                 # if i == 0:
                     # base.paste(triggered, (-10, 200))
                 # else:
