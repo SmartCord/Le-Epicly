@@ -22,6 +22,7 @@ class GeneralCommands:
             page = BytesIO(page)
             avatar = Image.open(page).resize((320, 320)).convert('RGBA')
             blank = Image.new('RGBA', (256, 256), color=(231, 19, 29))
+            tint = Image.open('assets/red.png').convert('RGBA')
             frames = []
             for i in range(8):
                 base = blank.copy()
@@ -31,13 +32,19 @@ class GeneralCommands:
                 else:
                     base.paste(avatar, (-32 + random.randint(-16, 16), -32 + random.randint(-16, 16)), avatar)
 
-                frames.append(base)
+                base.paste(tint, (0, 0), tint)
+
+                # if i == 0:
+                    # base.paste(triggered, (-10, 200))
+                # else:
+                    # base.paste(triggered, (-12 + randint(-8, 8), 200 + randint(0, 12)))
+
 
             b = BytesIO()
             frames[0].save(b, save_all=True, append_images=frames[1:], format='gif', loop=0, duration=20, disposal=2,
                            optimize=True)
             b.seek(0)
-            await ctx.send(file=discord.File(b, "ping.png"))
+            await ctx.send(file=discord.File(b, "ping.gif"))
         except Exception as e:
             await utils.botError(self.bot, ctx, e)
 
