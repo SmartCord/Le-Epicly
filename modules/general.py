@@ -1,9 +1,16 @@
 from discord.ext import commands
-from tools.utils import botError
+import utils 
 
 class GeneralCommands:
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command()
+    async def help(self, ctx):
+        try:
+            pass
+        except Exception as e:
+            await utils.botError(self.bot, ctx, e)
 
     @commands.command()
     async def ping(self, ctx):
