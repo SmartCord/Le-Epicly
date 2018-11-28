@@ -1,5 +1,5 @@
 from discord.ext import commands
-import utils 
+from tools import utils
 
 class GeneralCommands:
     def __init__(self, bot):
