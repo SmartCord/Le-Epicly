@@ -13,7 +13,7 @@ class LeEpic(commands.AutoShardedBot):
         super().__init__(command_prefix=self._get_shagger_prefix)
         self.loop.create_task(self.load_modules())
 
-    async def _get_shagger_prefix(self, message, bot):
+    async def _get_shagger_prefix(self, bot, message):
         prefix = utils.prefix(message)
         return commands.when_mentioned_or(prefix)(bot, message)
 
