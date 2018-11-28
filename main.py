@@ -28,8 +28,8 @@ class LeEpic(commands.AutoShardedBot):
                 print(f"Failed to load {module} : {e}")
 
     async def on_ready(self):
-        self.remove_command('help')
         print("Ok this is epic")
+        self.remove_command("help")
 
     async def on_message(self, message):
         if message.author.bot:
