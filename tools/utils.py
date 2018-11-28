@@ -1,14 +1,22 @@
 from pymongo import MongoClient
 import traceback, discord
-import datetime
+import datetime, random
 from os import environ
+
 
 db_password = environ.get('db_password')
 db_uri = "mongodb://zen:{}@leepiclybot-shard-00-00-wrvha.mongodb.net:27017,leepiclybot-shard-00-01-wrvha.mongodb.net:27017,leepiclybot-shard-00-02-wrvha.mongodb.net:27017/test?ssl=true&replicaSet=LeEpiclyBot-shard-0&authSource=admin&retryWrites=true".format(db_password)
 
 
+c = 0x0a91ff
+g = 0x18d45c
+r = 0xff4343
+
 client = MongoClient(db_uri)
 db = client['epic']
+
+def color():
+    return random.choice([0xff66c1, 0x6666c1, 0xb0d996, 0x588585, 0x21ff94, 0x1d4457, 0x77003c, 0x936dd4, 0xd46db6, 0x48cfa6])
 
 def prefix(message):
     if db.server_prefixes.count({"server_id":message.guild.id}):
