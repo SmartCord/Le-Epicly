@@ -10,7 +10,7 @@ async def run():
 
 class LeEpic(commands.AutoShardedBot):
     def __init__(self, **kwargs):
-        super().__init__(command_prefix=self._get_shagger_prefix())
+        super().__init__(command_prefix=self._get_shagger_prefix)
         self.loop.create_task(self.load_modules())
 
     async def _get_shagger_prefix(self, message, bot):
