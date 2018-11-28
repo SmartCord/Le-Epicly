@@ -29,7 +29,7 @@ class GeneralCommands:
                 if i == 0:
                     base.paste(avatar, (-16, -16), avatar)
                 else:
-                    base.paste(avatar, (-32 + randint(-16, 16), -32 + randint(-16, 16)), avatar)
+                    base.paste(avatar, (-32 + random.randint(-16, 16), -32 + random.randint(-16, 16)), avatar)
 
                 frames.append(base)
 
