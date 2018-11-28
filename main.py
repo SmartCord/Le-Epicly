@@ -29,7 +29,6 @@ class LeEpic(commands.AutoShardedBot):
 
     async def on_ready(self):
         print("Ok this is epic")
-        self.remove_command("help")
 
     async def on_message(self, message):
         if message.author.bot:

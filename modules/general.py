@@ -4,6 +4,7 @@ from tools import utils
 class GeneralCommands:
     def __init__(self, bot):
         self.bot = bot
+        self.bot.remove_command('help')
 
     @commands.command()
     async def help(self, ctx):
