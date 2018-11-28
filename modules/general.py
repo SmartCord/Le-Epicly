@@ -1,5 +1,5 @@
 from discord.ext import commands
-from tools.utils import boterror
+from tools.utils import botError
 
 class GeneralCommands:
     def __init__(self, bot):
