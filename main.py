@@ -2,7 +2,7 @@ from discord.ext import commands
 from tools import config, utils
 from tools.utils import db
 from pathlib import Path
-import asyncio
+import asyncio, random
 
 async def run():
     bot = LeEpic()
