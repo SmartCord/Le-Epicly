@@ -50,7 +50,7 @@ async def botError(bot, message, e):
     if message.author.id == 363880571614527488:
         return
 
-    ctx = bot.get_channel(514437538564538384)
+    ctx = bot.get_channel(517276933344460820)
     em = discord.Embed(title=f"Command Error", description=f"Command : {message.message.content}\n \
     User : {message.author} ({message.author.id})\n \
     Server : {message.guild} ({message.guild.id})", color=r)
