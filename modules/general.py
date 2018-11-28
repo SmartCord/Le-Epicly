@@ -3,6 +3,7 @@ from tools import utils
 import random, requests
 from io import BytesIO
 from PIL import Image
+import discord
 
 class GeneralCommands:
     def __init__(self, bot):
