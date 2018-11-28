@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-import traceback
+import traceback, discord
 import datetime
 from os import environ
 
