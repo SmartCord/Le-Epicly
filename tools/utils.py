@@ -1,8 +1,9 @@
 from pymongo import MongoClient
 import traceback
 import datetime
+from os import environ
 
-db_password = "dmuZOhJMj31l6Pya"
+db_password = environ.get('db_password')
 db_uri = "mongodb://zen:{}@leepiclybot-shard-00-00-wrvha.mongodb.net:27017,leepiclybot-shard-00-01-wrvha.mongodb.net:27017,leepiclybot-shard-00-02-wrvha.mongodb.net:27017/test?ssl=true&replicaSet=LeEpiclyBot-shard-0&authSource=admin&retryWrites=true".format(db_password)
 
 
