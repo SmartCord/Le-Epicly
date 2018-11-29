@@ -38,11 +38,9 @@ If you want to cancel then press :x:
                 def check(reaction, user):
                     return user == ctx.author
                 try:
-                    reaction = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
+                    reaction, message = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
                 except asyncio.TimeoutError:
                     return await ctx.send("Since you can't decide which button you should press, I decided to cancel it for you.")
-
-                print(reaction)
 
                 if str(reaction.emoji) == "✅":
                     db.profiles.update_one({"user_id":ctx.author.id}, {'$set':{'description':new}})
