@@ -12,7 +12,7 @@ class Tracker:
 
             trace = go.Pie(labels=labels, values=values)
             file = BytesIO()
-            pio.write_image(fig, file)
+            pio.write_image([trace], file)
             file.seek(0)
             await ctx.send(file=discord.File(file, 'test.png'))
 
