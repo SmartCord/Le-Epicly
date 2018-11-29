@@ -1,8 +1,4 @@
-from discord.ext import commands
-from tools import config, utils
-from tools.bot_tools import db
-from pathlib import Path
-import asyncio, random, discord
+from imports import *
 
 async def run():
     bot = LeEpic()

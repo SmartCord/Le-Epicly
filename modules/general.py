@@ -1,14 +1,24 @@
-from discord.ext import commands
-from tools import utils
-import random, requests
-from io import BytesIO
-from PIL import Image
-import discord, time
+from imports import *
 
 class GeneralCommands:
     def __init__(self, bot):
         self.bot = bot
         self.bot.remove_command('help')
+
+    @commands.command()
+    async def avatar(self, ctx, user: discord.Member = None):
+        try:
+            if user is None:
+                return await utils.usage(ctx, ['mention a user'], [ctx.author.mention], 'Returns a user\'s avatar. (Used to fully view a user\'s avatar and download it.)')
+
+            avatar = user.avatar_url
+            e = discord.Embed(title="Download Link", url=avatar, color=utils.color())
+            e.set_image(url=avatar)
+            utils.footer(ctx, e)
+            await ctx.send(embed=e)
+
+        except Exception as e:
+            await utils.botError(self.bot, ctx, e)
 
     @commands.command()
     async def ping(self, ctx, user: discord.Member = None):
