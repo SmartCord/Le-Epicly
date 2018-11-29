@@ -36,15 +36,15 @@ def icon(ctx, guild):
                 return None
 
 async def usage(ctx, arguments, example, description):
-    prefix = prefix(ctx)
+    prefixx = prefix(ctx)
     args = [f"<{arg}>" for arg in arguments]
     arguments = " ".join(args)
     example = " ".join(example)
     command = ctx.command.qualified_name
     e = discord.Embed(title="Wrong Usage", color=color())
-    e.add_field(name="Proper Usage", value=f"{prefix}{command} {arguments}")
+    e.add_field(name="Proper Usage", value=f"{prefixx}{command} {arguments}")
     e.add_field(name="\u200b", value="\u200b")
-    e.add_field(name="Example", value=f"{prefix}{command} {example}")
+    e.add_field(name="Example", value=f"{prefixx}{command} {example}")
     e.add_field(name="Description", value=description)
     e.set_thumbnail(url=gif['no1'])
     footer(ctx, e)
