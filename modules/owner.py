@@ -30,6 +30,7 @@ class OwnerGay:
     @commands.command(name='eval')
     @commands.is_owner()
     async def _eval(self, ctx, *, body: str):
+        print('gay test')
         """Evaluates a code"""
 
         env = {
