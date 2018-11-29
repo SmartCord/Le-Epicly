@@ -6,7 +6,7 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
-    async def profile_description(self, ctx, new: str = None):
+    async def profile_description(self, ctx, *, new: str = None):
         try:
             if new is None:
                 return await usage(ctx, ['new description (Max 200 Characters)'], ['Oof master gaddem'], "Lets you edit your profile description.")
@@ -32,8 +32,8 @@ If you want to cancel then press :x:
                 footer(ctx, e)
                 e.set_thumbnail(url=utils.gif['hmm1'])
                 embed_msg = await ctx.send(embed=e)
-                await embed_msg.add_reaction(':white_check_mark:')
-                await embed_msg.add_reaction(':x:')
+                await embed_msg.add_reaction('✅')
+                await embed_msg.add_reaction('❌')
 
                 def check(user):
                     return user == ctx.author
@@ -42,10 +42,10 @@ If you want to cancel then press :x:
                 except asyncio.TimeoutError:
                     return await ctx.send("Since you can't decide which button you should press, I decided to cancel it for you.")
 
-                if str(reaction.emoji) == ":white_check_mark:":
+                if str(reaction.emoji) == "✅":
                     db.profiles.update_one({"user_id":ctx.author.id}, {'$set':{'description':new}})
                     return await success(ctx, f"Successfully renewed your profile description to `{new}`.")
-                elif str(reaction.emoji) == ":x:":
+                elif str(reaction.emoji) == "❌":
                     can = await ctx.send("Successfully canceled the process cause you pressed :x:")
                     await embed_msg.delete()
                     await asyncio.sleep(8)
