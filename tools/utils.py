@@ -7,6 +7,11 @@ c = 0x0a91ff
 g = 0x18d45c
 r = 0xff4343
 
+gif = {
+    'no1':'https://media.giphy.com/media/6Q2KA5ly49368/giphy.gif',
+    'disappointed1':'https://media.giphy.com/media/U4VXRfcY3zxTi/giphy.gif'
+}
+
 def color():
     return random.choice([0xff66c1, 0x6666c1, 0xb0d996, 0x588585, 0x21ff94, 0x1d4457, 0x77003c, 0x936dd4, 0xd46db6, 0x48cfa6])
 
@@ -31,7 +36,7 @@ def icon(ctx, guild):
                 return None
 
 async def usage(ctx, arguments, example, description):
-    prefix = returnPrefix(ctx)
+    prefix = prefix(ctx)
     args = [f"<{arg}>" for arg in arguments]
     arguments = " ".join(args)
     example = " ".join(example)
@@ -41,7 +46,7 @@ async def usage(ctx, arguments, example, description):
     e.add_field(name="\u200b", value="\u200b")
     e.add_field(name="Example", value=f"{prefix}{command} {example}")
     e.add_field(name="Description", value=description)
-    e.set_thumbnail(url=gif['nobird'])
+    e.set_thumbnail(url=gif['no1'])
     footer(ctx, e)
     await ctx.send(embed=e)
 
@@ -80,8 +85,8 @@ def footer(ctx, embed, extra=None):
 
 async def botError(bot, message, e):
     e = traceback.format_exc()
-    em = discord.Embed(title="An unexpected error has occured", description=f"```{e}```\nThe error has now been sent to the bot developer", color=r)
-    em.set_thumbnail(url=bot.user.avatar_url)
+    em = discord.Embed(title="Oh well an unexpected error has occured", description=f"```{e}```\nThe error has now been sent to the bot developer. (Thank goodness)", color=r)
+    em.set_thumbnail(url=gif['disappointed1'])
     footer(message, em)
     await message.send(embed=em)
 
