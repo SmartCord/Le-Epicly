@@ -6,6 +6,56 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
+    async def profile(self, ctx, user: discord.Member = None):
+        try:
+            if user is None:
+                user = ctx.author
+
+            if not db.profiles.count({"user_id":user.id}):
+                return await error(ctx, "Profile Error", f"{user.name} doesn't have a profile yet. He has to type atleast one message to register a profile.")
+
+            for x in db.profiles.find({"user_id":user.id}):
+                is_private = x['is_private']
+                if is_private:
+                    return await error(ctx, "Profile Error", f"Sorry but big man {user.name} wants some privacy and has decided to set his profile to be viewed only by him.")
+
+                e = discord.Embed(title=f"Top Shagger {user.name}", color=color())
+                footer(ctx, e)
+                e.set_thumbnail(url=user.avatar_url)
+
+                if x['coins'] < 2:
+                    coins = f"{x['coins']} Coin"
+                else:
+                    coins = f"{x['coins']} Coins"
+
+                if x['diamonds'] < 2:
+                    diamonds = f"{x['diamonds']} Diamond"
+                else:
+                    diamonds = f"{x['diamonds']} Diamonds"
+
+                if x['description'] == "None":
+                    if user == ctx.author:
+                        description = f"Unfortunately you have not yet set a description for your profile. You can set one by using the `{prefix(ctx)}profile_description` command."
+                    else:
+                        description = f"Unfortunately big lad {user.name} here has not yet set a description for their profile."
+                else:
+                    description = x['description']
+
+                e.description = f"""
+<:gold:514791023671509003> Coins : {coins}
+<:starwhite:515866275503931393> XP : {x['xp']}/{x['max_xp']}
+<:diagay:515536803407593486> Diamonds : {diamonds}
+:speech_left: Messages : {x['messages']}
+
+:exclamation: Profile Description : {description}
+"""
+
+                await ctx.send(embed=e)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def avatar(self, ctx, user: discord.Member = None):
         try:
             if user is None:

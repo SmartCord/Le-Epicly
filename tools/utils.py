@@ -9,7 +9,8 @@ r = 0xff4343
 
 gif = {
     'no1':'https://media.giphy.com/media/6Q2KA5ly49368/giphy.gif',
-    'disappointed1':'https://media.giphy.com/media/U4VXRfcY3zxTi/giphy.gif'
+    'disappointed1':'https://media.giphy.com/media/U4VXRfcY3zxTi/giphy.gif',
+    'clap1':'https://media.tenor.com/images/96952c4cc0d24d6bb341adefc0932814/tenor.gif'
 }
 
 def color():
@@ -23,7 +24,7 @@ def prefix(message):
     except:
         return default_prefix
 
-def icon(ctx, guild):
+def guildIcon(ctx, guild):
     try:
         return guild.icon_url if guild.icon_url != "" else ctx.me.avatar_url
     except:
