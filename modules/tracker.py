@@ -36,7 +36,8 @@ class Tracker:
 
         if not author in self.antispam:
             db.profiles.update_one({"user_id":author}, {'$inc':{'xp':1}})
-            self.bot.loop.create_task(self.antiSpam(user.id))
+            self.antispam.append(author)
+            self.bot.loop.create_task(self.antiSpam(author))
 
         db.profiles.update_one({"user_id":author}, {'$inc':{'messages':1}})
 
