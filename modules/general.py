@@ -11,7 +11,7 @@ class GeneralCommands:
             if new is None:
                 return await usage(ctx, ['new description (Max 200 Characters)'], ['Oof master gaddem'], "Lets you edit your profile description.")
 
-            olddesc = [x['description'] for x in db.profile.find({"user_id":ctx.author.id})][0]
+            olddesc = [x['description'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
             if len(new) > 200:
                 return await error(ctx, "Length Error", "New Description cannot be greater than 200 characters.")
             if olddesc == "None":
