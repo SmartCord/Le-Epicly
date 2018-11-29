@@ -35,7 +35,7 @@ If you want to cancel then press :x:
                 await embed_msg.add_reaction('✅')
                 await embed_msg.add_reaction('❌')
 
-                def check(user):
+                def check(reaction, user):
                     return user == ctx.author
                 try:
                     reaction = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
