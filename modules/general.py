@@ -42,6 +42,8 @@ If you want to cancel then press :x:
                 except asyncio.TimeoutError:
                     return await ctx.send("Since you can't decide which button you should press, I decided to cancel it for you.")
 
+                print(reaction)
+
                 if str(reaction.emoji) == "✅":
                     db.profiles.update_one({"user_id":ctx.author.id}, {'$set':{'description':new}})
                     return await success(ctx, f"Successfully renewed your profile description to `{new}`.")
