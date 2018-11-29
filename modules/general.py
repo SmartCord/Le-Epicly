@@ -23,7 +23,7 @@ class GeneralCommands:
                 first = await ctx.send(embed=e)
                 pong_edit = time.time() - previous
                 pong_edit = int(round(pong_edit*1000))
-                e = discord.Embed(title=":ping_pong: Pongg!", description=f"It took `{pong}ms` to send this message end `{pong_edit}ms` to edit this message.", color=utils.color())
+                e = discord.Embed(title=":ping_pong: Pongg!", description=f"It took `{pong}ms` to send this message and `{pong_edit}ms` to edit this message.", color=utils.color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 utils.footer(ctx, e)
                 await first.edit(embed=e)
