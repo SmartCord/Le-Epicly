@@ -2,7 +2,7 @@ from discord.ext import commands
 from tools import config, utils
 from tools.bot_tools import db
 from pathlib import Path
-import asyncio, random
+import asyncio, random, discord
 
 async def run():
     bot = LeEpic()
@@ -26,6 +26,10 @@ class LeEpic(commands.AutoShardedBot):
                 print(f"Loaded {module}")
             except Exception as e:
                 print(f"Failed to load {module} : {e}")
+
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.errors.BadArgument):
+            return await utils.error(ctx, "Bad Argument", str(error))
 
     async def on_ready(self):
         print("Ok this is epic")
