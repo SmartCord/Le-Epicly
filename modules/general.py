@@ -7,7 +7,7 @@ class GeneralCommands:
 
     @commands.command()
     @commands.cooldown(1, 580, commands.BucketType.user)
-    async def rep(self, ctx, user: discord.Member = None:
+    async def rep(self, ctx, user: discord.Member = None):
         try:
             if user is None:
                 return await usage(ctx, ['mention a user'], [ctx.author.mention], "Gives the mentioned user a reputation point.")
