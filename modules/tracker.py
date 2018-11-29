@@ -29,7 +29,8 @@ class Tracker:
                 "diamonds":10,
                 "level":1,
                 "is_private":False,
-                "description":"None"
+                "description":"None",
+                "reputation":0
             }
             return db.profiles.insert_one(data)
 

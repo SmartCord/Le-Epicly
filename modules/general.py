@@ -101,8 +101,9 @@ If you want to cancel then press :x:
 <:diagay:515536803407593486> Diamonds : {diamonds}
 :speech_left: Messages : {x['messages']}
 :arrow_up: Level : {x['level']}
+:heart: Reputation : {x['reputation']}
 
-:exclamation: Profile Description : {description}
+:label: Profile Description : {description}
 """
 
                 await ctx.send(embed=e)
