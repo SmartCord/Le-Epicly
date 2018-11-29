@@ -1,3 +1,6 @@
 Profile Error :
   The bot was not able to find the user's profile.
   The user's profile is private
+
+Length Error :
+  The text you entered is too long
