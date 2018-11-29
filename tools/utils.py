@@ -1,6 +1,6 @@
 import traceback, discord
 import datetime, random
-from bot_tools import db
+from tools.bot_tools import db
 
 default_prefix = "?"
 c = 0x0a91ff
