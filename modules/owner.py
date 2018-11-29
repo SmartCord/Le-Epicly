@@ -19,8 +19,9 @@ class OwnerGay:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def eval_fn(ctx, *, cmd):
+    @commands.command(name="eval")
+    @commands.is_owner()
+    async def _eval(ctx, *, cmd):
         """Evaluates input.
         Input is interpreted as newline seperated statements.
         If the last statement is an expression, that is the return value.
