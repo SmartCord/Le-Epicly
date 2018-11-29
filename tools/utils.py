@@ -11,7 +11,8 @@ gif = {
     'no1':'https://media.giphy.com/media/6Q2KA5ly49368/giphy.gif',
     'disappointed1':'https://media.giphy.com/media/U4VXRfcY3zxTi/giphy.gif',
     'clap1':'https://media.tenor.com/images/96952c4cc0d24d6bb341adefc0932814/tenor.gif',
-    'hmm1':'https://media0.giphy.com/media/y3QOvy7xxMwKI/giphy.gif'
+    'hmm1':'https://media0.giphy.com/media/y3QOvy7xxMwKI/giphy.gif',
+    'enough1':'https://media.giphy.com/media/3oEduKiu3xvjkYvCww/200.gif'
 }
 
 def color():

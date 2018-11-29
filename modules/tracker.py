@@ -30,7 +30,8 @@ class Tracker:
                 "level":1,
                 "is_private":False,
                 "description":"None",
-                "reputation":0
+                "reputation":0,
+                "reppers":[]
             }
             return db.profiles.insert_one(data)
 

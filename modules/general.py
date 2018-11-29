@@ -6,6 +6,32 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
+    @commands.cooldown(1, 580, commands.BucketType.user)
+    async def rep(self, ctx, user: discord.Member = None:
+        try:
+            if user is None:
+                return await usage(ctx, ['mention a user'], [ctx.author.mention], "Gives the mentioned user a reputation point.")
+
+            if not db.profiles.count({"user_id":user.id}):
+                return await error(ctx, "Profile Error", f"{user.name} doesn't have a profile yet. He has to type atleast one message to register a profile.")
+
+            reppers = [x['reppers'] for x in db.profiles.find({"user_id":user.id})][0]
+            reppers = [x for x in reppers if x == ctx.author.id]
+            if len(reppers) >= 5:
+                e = discord.Embed(title=f"Oops that's enough.", description=f"You have already gave {user.name} {len(reppers)} reputation points and that's enough.", color=color())
+                e.set_thumbnail(url=utils.gif['enough1'])
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'reputation':1}})
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$push':{'reppers':ctx.author.id}})
+
+            await success(ctx, f"Successfully gave {user.name} one reputation point.")
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def profile_description(self, ctx, *, new: str = None):
         try:
             if new is None:
