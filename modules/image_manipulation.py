@@ -81,6 +81,7 @@ class ImageManipulation:
             file = BytesIO()
             base.save(file, "png")
             file.seek(0)
+            await ctx.send(file=discord.File(file, 'gay.png'))
 
         except Exception as e:
             await botError(self.bot, ctx, e)
