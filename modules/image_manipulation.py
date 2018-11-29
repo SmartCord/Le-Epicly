@@ -49,6 +49,44 @@ class ImageManipulation:
         self.bot = bot
 
     @commands.command()
+    async def deepfry(self, ctx, user: discord.Member = None):
+        try:
+            if user is None:
+                return await usage(ctx, ['mention a user'], [ctx.author.mention], "Deepfries a user's avatar.")
+            emoji = 0
+            z = (300,300)
+            ok = Image.open("assets/ok.png")
+            lol = Image.open("assets/lol.png")
+            noise = Image.open("assets/noise.jpg")
+
+            img = requests.get(user.avatar_url)
+            img = BytesIO(img.content)
+            img = Image.open(img)
+            img = img.resize((800,800))
+            base = img.convert('RGBA')
+            noise = noise.resize((800,800)).convert('RGBA')
+            if emoji is 1:
+
+                ok = ok.resize(z)
+                lol = lol.resize(z).convert('RGBA')
+                ok = ok.rotate(30)
+                lol = lol.rotate(40)
+
+                base.paste(ok, (521,240), ok)
+                base.paste(lol, (75,70), lol)
+
+            img = Image.blend(base, noise, .2)
+            img = ImageEnhance.Color(img)
+            img = img.enhance(4.0)
+            img = change_contrast(img, 200)
+            file = BytesIO()
+            img.save(file, "png")
+            file.seek(0)
+            await ctx.send(file=discord.File(file, 'meme.png'))
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def spiderglasses(self, ctx, user1: discord.Member = None, user2: discord.Member = None):
         try:
             if user2 is None:
