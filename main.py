@@ -1,6 +1,6 @@
 from discord.ext import commands
 from tools import config, utils
-from tools.utils import db
+from tools.bot_tools import db
 from pathlib import Path
 import asyncio, random
 
@@ -33,9 +33,6 @@ class LeEpic(commands.AutoShardedBot):
     async def on_message(self, message):
         if message.author.bot:
             return
-        for content in message.content.split():
-            if content == "112.204.105.193":
-                await message.delete()
         await self.process_commands(message)
 
 if __name__ == '__main__':
