@@ -14,7 +14,7 @@ class OwnerGay:
             if new_name is None:
                 return await utils.usage(ctx, ['new name'], ['you gay men'], 'Lets you change the bot\'s actual name (Not nickname).')
 
-            await self.bot.user.edit(name=new_name)
+            await self.bot.user.edit(username=new_name)
             await utils.success(ctx, "Successfully changed the name to {}".format(new_name))
 
         except Exception as e:
