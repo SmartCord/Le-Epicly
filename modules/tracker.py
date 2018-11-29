@@ -39,6 +39,7 @@ class Tracker:
                 coinreward = random.randint(100, 200) * x['level'] + 1 - 100
                 diamondreward = random.randint(10, 20) * x['level'] + 1 - 10
                 rewards = [f'<:gold:514791023671509003> {coinreward} Coins', f'<:diagay:515536803407593486> {diamondreward} Diamonds']
+                rewards = "\n".join(rewards)
 
                 e = discord.Embed(title="Level Up!", description=f":clap: Congratulations {message.author.name} you have leveled up to level {x['level'] + 1}. :clap:\n\nHere are your awesome perks!\n{rewards}", color=color())
                 footer(message.author, e)

@@ -46,6 +46,7 @@ class GeneralCommands:
 <:starwhite:515866275503931393> XP : {x['xp']}/{x['max_xp']}
 <:diagay:515536803407593486> Diamonds : {diamonds}
 :speech_left: Messages : {x['messages']}
+:arrow_up: Level : {x['level']}
 
 :exclamation: Profile Description : {description}
 """
