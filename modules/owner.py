@@ -68,7 +68,7 @@ class OwnerGay:
                 await ctx.message.add_reaction('\u2705')
             except:
                 pass
-
+            await ctx.send('test')
             if ret is None:
                 if value:
                     await ctx.send(f'```py\n{value}\n```')
