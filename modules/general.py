@@ -137,7 +137,7 @@ If you want to cancel then press :x:
                 is_private = x['is_private']
                 if is_private:
                     if user is ctx.author:
-                        e = discord.Embed(title="Your profile is private", "You have decided to set your profile to private. How can you forget about that?", color=color())
+                        e = discord.Embed(title="Your profile is private", description="You have decided to set your profile to private. How can you forget about that?", color=color())
                         e.set_thumbnail(url=user.avatar_url)
                         footer(ctx, e)
                         return await ctx.send(embed=e)
