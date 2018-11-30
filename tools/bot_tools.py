@@ -7,10 +7,10 @@ client = MongoClient(db_uri)
 db = client['epic']
 
 class AchievementNotFound(Exception):
-    return
+    pass
 
 class UserNotFound(Exception):
-    return
+    pass
 
 async def giveAchievement(user, id):
     if not db.achievements.count({"id":id}):
