@@ -27,7 +27,7 @@ class OwnerGay:
         self._last_result = None
 
 
-    @commands.command(name='eval')
+    @commands.command(name='eval', pass_context=True)
     @commands.is_owner()
     async def _eval(self, ctx, *, body: str):
         print('gay test')
