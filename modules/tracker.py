@@ -1,4 +1,5 @@
 from imports import *
+from tools import bot_utils
 
 class Tracker:
     def __init__(self, bot):
@@ -47,7 +48,7 @@ class Tracker:
 
         for x in db.profiles.find({"user_id":author}):
             if x['messages'] == 2000:
-                await giveAchievement(message.author, 0)
+                await bot_utils.giveAchievement(message.author, 0)
 
             if x['xp'] >= x['max_xp']:
                 db.profiles.update_one({"user_id":author}, {'$set':{'xp':1}})
