@@ -6,6 +6,38 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
+    async def change_privacy(self, ctx, data: str = None):
+        try:
+            if data is None:
+                return await usage(ctx, ['true or false'], ['true'], f"Lets you decide wether you want your profile to be private or not. If this is true then no one else can view your profile.")
+
+            old = [x['is_private'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+
+            trues = ('YES', 'TRUE', '1')
+            noes = ('NO', 'FALSE', '0')
+            if data.upper() in trues:
+                if old == True:
+                    x = "Guess what, your profile is already private. Nothing to change here."
+                else:
+                    db.profiles.update_one({"user_id":ctx.author.id}, {'$set':{'is_private':True}})
+                    x = "Successfully made your profile private."
+            elif data.upper() in noes:
+                if old == False:
+                    x = "Guess what, your profile is already public. Nothing to change here."
+                else:
+                    db.profiles.update_one({"user_id":ctx.author.id}, {'$set':{'is_private':False}})
+                    x = "Successfully made your profile public."
+            else:
+                e = discord.Embed(title="Not an option", description="Well that is not a valid option, maybe try again?", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+            await success(ctx, x)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def rep(self, ctx, user: discord.Member = None):
         try:
@@ -104,7 +136,15 @@ If you want to cancel then press :x:
             for x in db.profiles.find({"user_id":user.id}):
                 is_private = x['is_private']
                 if is_private:
-                    return await error(ctx, "Profile Error", f"Sorry but big man {user.name} wants some privacy and has decided to set his profile to be viewed only by him.")
+                    if user is ctx.author:
+                        e = discord.Embed(title="Your profile is private", "You have decided to set your profile to private. How can you forget about that?", color=color())
+                        e.set_thumbnail(url=user.avatar_url)
+                        footer(ctx, e)
+                        return await ctx.send(embed=e)
+                    e = discord.Embed(title="Profile is private", description=f"Sorry but big man {user.name} wants some privacy and has decided to set his profile to be viewed only by him.", color=color())
+                    e.set_thumbnail(url=user.avatar_url)
+                    footer(ctx, e)
+                    return await ctx.send(embed=e)
 
                 e = discord.Embed(title=f"Top Shagger {user.name}", color=color())
                 footer(ctx, e)
@@ -161,6 +201,7 @@ If you want to cancel then press :x:
             await utils.botError(self.bot, ctx, e)
 
     @commands.command()
+    @commands.cooldown(5, 20, commands.BucketType.user)
     async def ping(self, ctx, user: discord.Member = None):
         try:
             if user is None:
