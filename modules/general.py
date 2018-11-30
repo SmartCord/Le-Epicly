@@ -12,6 +12,12 @@ class GeneralCommands:
             if user is None:
                 return await usage(ctx, ['mention a user'], [ctx.author.mention], "Gives the mentioned user a reputation point.")
 
+            if user is ctx.author:
+                e = discord.Embed(title="Woah nice try!", description="Sorry but you obviously cannot give yourself reputation points. Better luck next time!", color=color())
+                e.set_thumbnail(url=utils.gif['no1'])
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
             if not db.profiles.count({"user_id":user.id}):
                 return await error(ctx, "Profile Error", f"{user.name} doesn't have a profile yet. He has to type atleast one message to register a profile.")
 
@@ -23,8 +29,8 @@ class GeneralCommands:
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'reputation':1}})
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$push':{'reppers':ctx.author.id}})
+            db.profiles.update_one({"user_id":user.id}, {'$inc':{'reputation':1}})
+            db.profiles.update_one({"user_id":user.id}, {'$push':{'reppers':ctx.author.id}})
 
             await success(ctx, f"Successfully gave {user.name} one reputation point.")
 
