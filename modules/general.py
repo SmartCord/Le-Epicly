@@ -6,7 +6,7 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
-    @commands.cooldown(1, 580, commands.BucketType.user)
+    @commands.cooldown(1, 300, commands.BucketType.user)
     async def rep(self, ctx, user: discord.Member = None):
         try:
             if user is None:
@@ -135,6 +135,7 @@ If you want to cancel then press :x:
 :speech_left: Messages : {x['messages']}
 :arrow_up: Level : {x['level']}
 :heart: Reputation : {x['reputation']}
+:large_blue_diamond: Achievements : {len(x['achievements'])}
 
 :label: Profile Description : {description}
 """
