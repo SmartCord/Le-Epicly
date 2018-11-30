@@ -31,7 +31,9 @@ class Tracker:
                 "is_private":False,
                 "description":"None",
                 "reputation":0,
-                "reppers":[]
+                "reppers":[],
+                "achievements":[],
+                "items":[]
             }
             return db.profiles.insert_one(data)
 
@@ -44,6 +46,9 @@ class Tracker:
         db.profiles.update_one({"user_id":author}, {'$inc':{'messages':1}})
 
         for x in db.profiles.find({"user_id":author}):
+            if x['messages'] == 2000:
+                await giveAchievement(message.author, 0)
+
             if x['xp'] >= x['max_xp']:
                 db.profiles.update_one({"user_id":author}, {'$set':{'xp':1}})
                 db.profiles.update_one({"user_id":author}, {'$inc':{'max_xp':200}})

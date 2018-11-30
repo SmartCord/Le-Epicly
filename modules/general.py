@@ -6,7 +6,7 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
-    #@commands.cooldown(1, 580, commands.BucketType.user)
+    @commands.cooldown(1, 580, commands.BucketType.user)
     async def rep(self, ctx, user: discord.Member = None):
         try:
             if user is None:
