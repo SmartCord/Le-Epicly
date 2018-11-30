@@ -15,7 +15,7 @@ def insert_returns(body):
     if isinstance(body[-1], ast.With):
         insert_returns(body[-1].body)
 
-def cleanup_code(self, content):
+def cleanup_code(content):
     """Automatically removes code blocks from the code."""
     # remove ```py\n```
     if content.startswith('```') and content.endswith('```'):
@@ -26,55 +26,49 @@ class OwnerGay:
         self.bot = bot
         self._last_result = None
 
-
-    @commands.command(pass_context=True, name='eval')
+    @commands.command(pass_context=True, name="eval")
     @commands.is_owner()
-    async def _eval(self, ctx, *, body: str):
-        print('gay test')
-        """Evaluates a code"""
-
-        env = {
-            'bot': self.bot,
-            'ctx': ctx,
-            'channel': ctx.channel,
-            'author': ctx.author,
-            'guild': ctx.guild,
-            'message': ctx.message,
-            '_': self._last_result
-        }
-
-        env.update(globals())
-
-        body = cleanup_code(body)
-        stdout = io.StringIO()
-
-        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
-
+    async def cool_eval_bullshit(self, ctx, *, body: str):
         try:
-            exec(to_compile, env)
-        except Exception as e:
-            return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
-
-        func = env['func']
-        try:
-            with redirect_stdout(stdout):
-                ret = await func()
-        except Exception as e:
-            value = stdout.getvalue()
-            await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
-        else:
-            value = stdout.getvalue()
+            """ Code from R.Danny bot yeyey k, modified to fit my other bullshit """
+            env = {
+                'bot':self.bot,
+                'ctx':ctx,
+                'db':db
+            }
+            env.update(globals())
+            body = cleanup_code(body)
+            men = io.StringIO()
+            to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
             try:
-                await ctx.message.add_reaction('\u2705')
-            except:
-                pass
-            await ctx.send('test')
-            if ret is None:
-                if value:
-                    await ctx.send(f'```py\n{value}\n```')
+                exec(to_compile, env)
+            except Exception as e:
+                return await ctx.send(f'```py\n{e}\n```')
+
+            func = env['func']
+
+            try:
+                with redirect_stdout(std):
+                    ret = await func()
+            except Exception as e:
+                value = std.getvalue()
+                await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
             else:
-                self._last_result = ret
-                await ctx.send(f'```py\n{value}{ret}\n```')
+                value = std.getvalue()
+                try:
+                    await ctx.message.add_reaction('\u2705')
+                except:
+                    pass
+                if ret is None:
+                    if value:
+                        await ctx.send(f'```py\n{value}\n```')
+                else:
+                    self._last_result = ret
+                    await ctx.send(f'```py\n{value}{ret}\n```')
+
+        except Exception as e:
+            await utils.botError(self.bot, ctx, e)
+
 
     @commands.command()
     @commands.is_owner()
