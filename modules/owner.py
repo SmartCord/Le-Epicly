@@ -38,7 +38,7 @@ class OwnerGay:
             }
             env.update(globals())
             body = cleanup_code(body)
-            men = io.StringIO()
+            std = io.StringIO()
             to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
             try:
                 exec(to_compile, env)
