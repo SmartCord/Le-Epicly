@@ -14,7 +14,7 @@ class GeneralCommands:
 
             if user is ctx.author:
                 e = discord.Embed(title="Woah nice try!", description="Sorry but you obviously cannot give yourself reputation points. Better luck next time!", color=color())
-                e.set_thumbnail(url=utils.gif['no1'])
+                e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
@@ -25,14 +25,15 @@ class GeneralCommands:
             reppers = [x for x in reppers if x == ctx.author.id]
             if len(reppers) >= 5:
                 e = discord.Embed(title=f"Oops that's enough.", description=f"You have already gave {user.name} {len(reppers)} reputation points and that's enough.", color=color())
-                e.set_thumbnail(url=utils.gif['enough1'])
+                e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
             db.profiles.update_one({"user_id":user.id}, {'$inc':{'reputation':1}})
             db.profiles.update_one({"user_id":user.id}, {'$push':{'reppers':ctx.author.id}})
 
-            await success(ctx, f"Successfully gave {user.name} one reputation point.")
+
+            await success(ctx, f"Successfully gave {user.name} one reputation point.", user.avatar_url)
 
         except Exception as e:
             await botError(self.bot, ctx, e)
@@ -62,7 +63,7 @@ If you want to cancel then press :x:
 """, color=color())
 
                 footer(ctx, e)
-                e.set_thumbnail(url=utils.gif['hmm1'])
+                e.set_thumbnail(url=ctx.me.avatar_url)
                 embed_msg = await ctx.send(embed=e)
                 await embed_msg.add_reaction('✅')
                 await embed_msg.add_reaction('❌')
