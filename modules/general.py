@@ -18,6 +18,8 @@ class GeneralCommands:
 <:diagay:515536803407593486> Price on diamonds : {x['diamonds']} Diamonds
 """
                 i += 1
+                pg.add_line(line)
+
 
             embeds = []
             for page in pg.pages:
@@ -25,8 +27,6 @@ class GeneralCommands:
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 embeds.append(e)
-
-            return await ctx.send(embed=embeds[0])
 
             p = paginator.EmbedPages(ctx, embeds=embeds)
             await p.paginate()
