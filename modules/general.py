@@ -26,6 +26,8 @@ class GeneralCommands:
                 footer(ctx, e)
                 embeds.append(e)
 
+            return await ctx.send(embed=embeds[0])
+
             p = paginator.EmbedPages(ctx, embeds=embeds)
             await p.paginate()
 
