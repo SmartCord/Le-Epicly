@@ -1,6 +1,7 @@
 from discord.ext import commands
 from tools import utils, config
 from tools.bot_tools import db
+import paginator
 from pathlib import Path
 import random, requests, asyncio, discord, time, ast, io, traceback, textwrap
 from io import BytesIO

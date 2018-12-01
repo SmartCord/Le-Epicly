@@ -7,7 +7,7 @@ class Tracker:
         self.antispam = []
 
     async def antiSpam(self, user):
-        await asyncio.sleep(50)
+        await asyncio.sleep(20)
         self.antispam.remove(user)
 
     async def on_message(self, message):
@@ -34,13 +34,14 @@ class Tracker:
                 "reputation":0,
                 "reppers":[],
                 "achievements":[],
-                "items":[]
+                "items":[],
+                "memes":0
             }
             return db.profiles.insert_one(data)
 
 
         if not author in self.antispam:
-            db.profiles.update_one({"user_id":author}, {'$inc':{'xp':1}})
+            db.profiles.update_one({"user_id":author}, {'$inc':{'xp':1, 'coins':1}})
             self.antispam.append(author)
             self.bot.loop.create_task(self.antiSpam(author))
 

@@ -6,6 +6,163 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
+    async def store(self, ctx):
+        try:
+            pg = commands.Paginator(prefix="", suffix="", max_size=1022)
+            i = 1
+            for x in db.store.find({}):
+                line = f"""
+{i}. {x['name']}
+{x['description']}
+<:gold:514791023671509003> Price : {x['coins']} Coins
+<:diagay:515536803407593486> Price on diamonds : {x['diamonds']} Diamonds
+"""
+                i += 1
+
+            embeds = []
+            for page in pg.pages:
+                e = discord.Embed(title="Cool store wow", description=page, color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command(alias=['purchase'])
+    async def buy(self, ctx, *, item: str = None):
+        try:
+            if item is None:
+                return await usage(ctx, ['item name'], ['i like memes'], 'Lets you purchase an item from the store.')
+
+            item = item.upper()
+
+            if not db.store.count({"name_upper":item}):
+                e = discord.Embed(title="That item doesn't exist", description="Sorry mate but the item you entered doesn't exist. Please make sure the spelling is correct and there are no extra characters.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            e = discord.Embed(title="What do you want to purchase with?", description="Choose by clicking one of the reactions below.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            embed = await ctx.send(embed=e)
+            coin = self.bot.get_emoji(514791023671509003)
+            diamond = self.bot.get_emoji(515536803407593486)
+            await embed.add_reaction(coin)
+            await embed.add_reaction(diamond)
+
+            def check(reaction, user):
+                return user == ctx.author
+
+            perks = []
+
+            for x in db.store.find({"name_upper":item}):
+                name = x['name']
+                coins = x['coins']
+                diamonds = x['diamonds']
+                try:
+                    perks.append(['memes', x['memes']])
+                    break
+                except:
+                    pass
+
+            for x in db.profiles.find({"user_id":ctx.author.id}):
+                user_coins = x['coins']
+                user_diamonds = x['diamonds']
+
+            if user_coins < 2:
+                c = ""
+            else:
+                c = "s"
+
+            if user_diamonds < 2:
+                d = ""
+            else:
+                d = "s"
+
+            x = False
+
+            for i in perks:
+                if 'memes' in i:
+                    data = {'$inc':{'memes':i[1]}}
+
+            tries = []
+
+            while x is False:
+                try:
+                    reaction, message = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
+                except asyncio.TimeoutError:
+                    return await ctx.send("Since you can't decide which purchase method to use, I decided to cancel it for you.")
+
+                if reaction.emoji == coin:
+                    if user_coins < coins:
+                        e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_coins} Coin{c} and that item costs {coins} Coins.", color=color())
+                        e.set_thumbnail(url=ctx.me.avatar_url)
+                        footer(ctx, e)
+                        if not 1 in tries:
+                            e.description += " Try paying with diamonds."
+                            tries.append(1)
+                        if len(tries) >= 2:
+                            e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
+                            return await ctx.send(embed=e)
+                        await ctx.send(embed=e)
+                    else:
+                        db.profiles.update_one({"user_id":ctx.author.id}, data)
+                        left = user_coins - coins
+                        db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"coins":-left}})
+                        if left < 2 and != 0:
+                            lol = f"You now have {left} Coin left."
+                        elif left == 0:
+                            lol = f"You no longer have any coins. How sad :("
+                        else:
+                            lol = f"You now have {left} Coins left."
+
+                        message = lol
+                        x = True
+
+                elif reaction.emoji == diamond:
+                    if user_diamonds < diamonds:
+                        e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_diamond} Diamond{d} and that item costs {diamonds} Diamonds.", color=color())
+                        e.set_thumbnail(url=ctx.me.avatar_url)
+                        footer(ctx, e)
+                        if not 2 in tries:
+                            e.description += " Try paying with coins."
+                            tries.append(2)
+
+                        if len(tries) >= 2:
+                            e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
+                            return await ctx.send(embed=e)
+                        await ctx.send(embed=e)
+                    else:
+                        db.profiles.update_one({"user_id":ctx.author.id}, data)
+                        left = user_diamonds - diamonds
+                        db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"diamonds":-left}})
+                        if left < 2 and != 0:
+                            lol = f"You now have {left} Diamond left."
+                        elif left == 0:
+                            lol = f"You no longer have any diamonds. How sad :("
+                        else:
+                            lol = f"You now have {left} Diamonds left."
+
+                        message = lol
+                        x = True
+                else:
+                    can = await ctx.send("Successfully canceled the process cause you added a different reaction. lel")
+                    await embed_msg.delete()
+                    await asyncio.sleep(8)
+                    await can.delete()
+                    return
+
+            await success(ctx, f"Successfully purchased the item `{name}`, {message}")
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def change_privacy(self, ctx, data: str = None):
         try:
             if data is None:
