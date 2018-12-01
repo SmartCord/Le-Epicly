@@ -141,7 +141,7 @@ class GeneralCommands:
                         db.profiles.update_one({"user_id":ctx.author.id}, data)
                         left = user_diamonds - diamonds
                         db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"diamonds":-left}})
-                        if left < 2 and != 0:
+                        if left < 2 and left != 0:
                             lol = f"You now have {left} Diamond left."
                         elif left == 0:
                             lol = f"You no longer have any diamonds. How sad :("
