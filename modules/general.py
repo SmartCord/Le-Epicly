@@ -34,7 +34,7 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
-    @commands.command(alias=['purchase'])
+    @commands.command(aliases=['purchase'])
     async def buy(self, ctx, *, item: str = None):
         try:
             if item is None:
