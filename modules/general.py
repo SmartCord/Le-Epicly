@@ -124,9 +124,10 @@ class GeneralCommands:
                         if not 1 in tries and len(tries) != 1:
                             e.description += " Try paying with diamonds."
                             tries.append(1)
-                        if len(tries) >= 1:
-                            e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
-                            return await ctx.send(embed=e)
+                        else:
+                            if len(tries) >= 1:
+                                e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
+                                return await ctx.send(embed=e)
                         await ctx.send(embed=e)
                     else:
                         db.profiles.update_one({"user_id":ctx.author.id}, data)
@@ -150,10 +151,10 @@ class GeneralCommands:
                         if not 2 in tries and len(tries) != 1:
                             e.description += " Try paying with coins."
                             tries.append(2)
-
-                        if len(tries) >= 1:
-                            e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
-                            return await ctx.send(embed=e)
+                        else:
+                            if len(tries) >= 1:
+                                e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
+                                return await ctx.send(embed=e)
                         await ctx.send(embed=e)
                     else:
                         db.profiles.update_one({"user_id":ctx.author.id}, data)
