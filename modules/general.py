@@ -130,7 +130,7 @@ class GeneralCommands:
                     else:
                         db.profiles.update_one({"user_id":ctx.author.id}, data)
                         left = user_coins - coins
-                        db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"coins":-left}})
+                        db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"coins":-coins}})
                         if left < 2 and left != 0:
                             lol = f"You now have {left} Coin left."
                         elif left == 0:
@@ -157,7 +157,7 @@ class GeneralCommands:
                     else:
                         db.profiles.update_one({"user_id":ctx.author.id}, data)
                         left = user_diamonds - diamonds
-                        db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"diamonds":-left}})
+                        db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"diamonds":-diamonds}})
                         if left < 2 and left != 0:
                             lol = f"You now have {left} Diamond left."
                         elif left == 0:
