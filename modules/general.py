@@ -39,7 +39,11 @@ class GeneralCommands:
 
                 memes = x['memes']
 
-            e = discord.Embed(title="Here are all of your points.", color=color())
+            title = "Here all of your points."
+            if user != ctx.author:
+                title = f"Here are all of {user.name}'s points."
+
+            e = discord.Embed(title=title, color=color()).set_thumbnail(url=user.avatar_url)
             e.description = f"""
 :small_orange_diamond: Memes : {x['memes']}
 """
