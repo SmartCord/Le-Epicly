@@ -7,7 +7,7 @@ class Tracker:
         self.antispam = []
 
     async def antiSpam(self, user):
-        await asyncio.sleep(20)
+        await asyncio.sleep(50)
         self.antispam.remove(user)
 
     async def on_message(self, message):

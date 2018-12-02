@@ -6,6 +6,20 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
+    async def meme(self, ctx):
+        try:
+            counter = [x['memes'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+            if counter < 1:
+                e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{returnPrefix(ctx)}meme_collection` command.", color=color())
+                footer(ctx, e)
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                await ctx.send(embed=e)
+                return
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def store(self, ctx):
         try:
             pg = commands.Paginator(prefix="", suffix="", max_size=1022)
@@ -128,7 +142,7 @@ class GeneralCommands:
 
                 elif reaction.emoji == diamond:
                     if user_diamonds < diamonds:
-                        e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_diamond} Diamond{d} and that item costs {diamonds} Diamonds.", color=color())
+                        e = discord.Embed(title="Not enough diamonds :(", description=f"You only have {user_diamonds} Diamond{d} and that item costs {diamonds} Diamonds.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
                         footer(ctx, e)
                         if not 2 in tries:
