@@ -109,10 +109,11 @@ class GeneralCommands:
             tries = []
 
             while x is False:
-                try:
-                    reaction, message = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
-                except asyncio.TimeoutError:
-                    return await ctx.send("Since you can't decide which purchase method to use, I decided to cancel it for you.")
+                if x is False:
+                    try:
+                        reaction, message = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
+                    except asyncio.TimeoutError:
+                        return await ctx.send("Since you can't decide which purchase method to use, I decided to cancel it for you.")
 
                 if reaction.emoji == coin:
                     if user_coins < coins:
