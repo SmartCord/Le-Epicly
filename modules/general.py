@@ -20,8 +20,10 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
-    async def points(self, ctx):
+    async def points(self, ctx, user: discord.Member = None):
         try:
+            if user is None:
+                user = ctx.author
             for x in db.profiles.find({"user_id":user.id}):
                 is_private = x['is_private']
                 if is_private:
