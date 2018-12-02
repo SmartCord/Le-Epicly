@@ -120,7 +120,7 @@ class GeneralCommands:
                         e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_coins} Coin{c} and that item costs {coins} Coins.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
                         footer(ctx, e)
-                        if not 1 in tries and not len(tries) = 1:
+                        if not 1 in tries and not len(tries) == 1:
                             e.description += " Try paying with diamonds."
                             tries.append(1)
                         if len(tries) >= 2:
@@ -146,7 +146,7 @@ class GeneralCommands:
                         e = discord.Embed(title="Not enough diamonds :(", description=f"You only have {user_diamonds} Diamond{d} and that item costs {diamonds} Diamonds.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
                         footer(ctx, e)
-                        if not 2 in tries and not len(tries) = 1:
+                        if not 2 in tries and not len(tries) == 1:
                             e.description += " Try paying with coins."
                             tries.append(2)
 
