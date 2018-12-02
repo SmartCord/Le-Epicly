@@ -120,10 +120,11 @@ class GeneralCommands:
                         e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_coins} Coin{c} and that item costs {coins} Coins.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
                         footer(ctx, e)
+
                         if not 1 in tries and len(tries) != 1:
                             e.description += " Try paying with diamonds."
                             tries.append(1)
-                        if len(tries) >= 2:
+                        if len(tries) >= 1:
                             e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
                             return await ctx.send(embed=e)
                         await ctx.send(embed=e)
@@ -150,7 +151,7 @@ class GeneralCommands:
                             e.description += " Try paying with coins."
                             tries.append(2)
 
-                        if len(tries) >= 2:
+                        if len(tries) >= 1:
                             e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
                             return await ctx.send(embed=e)
                         await ctx.send(embed=e)
