@@ -20,6 +20,34 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def points(self, ctx):
+        try:
+            for x in db.profiles.find({"user_id":user.id}):
+                is_private = x['is_private']
+                if is_private:
+                    if user is ctx.author:
+                        e = discord.Embed(title="Your profile is private", description="You have decided to set your profile to private. How can you forget about that?", color=color())
+                        e.set_thumbnail(url=user.avatar_url)
+                        footer(ctx, e)
+                        return await ctx.send(embed=e)
+                    e = discord.Embed(title="Profile is private", description=f"Sorry but big man {user.name} wants some privacy and has decided to set his profile to be viewed only by him.", color=color())
+                    e.set_thumbnail(url=user.avatar_url)
+                    footer(ctx, e)
+                    return await ctx.send(embed=e)
+
+                memes = x['memes']
+
+            e = discord.Embed(title="Here are all of your points.", color=color())
+            e.description = f"""
+:small_orange_diamond: Memes : {x['memes']}
+"""
+            footer(ctx, e)
+            await ctx.send(embed=e)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def store(self, ctx):
         try:
             pg = commands.Paginator(prefix="", suffix="", max_size=1022)
