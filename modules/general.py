@@ -10,11 +10,24 @@ class GeneralCommands:
         try:
             counter = [x['memes'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
             if counter < 1:
-                e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{returnPrefix(ctx)}meme_collection` command.", color=color())
+                e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{returnPrefix(ctx)}meme_collection` command. To buy more meme points visit the store.", color=color())
                 footer(ctx, e)
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 await ctx.send(embed=e)
                 return
+
+            memes = [x for x in db.memes.find({})]
+            meme = random.choice(meme)
+            e = discord.Embed(title=f"{meme['title']}", url=meme['url'], color=color())
+            e.set_image(url=meme['image'])
+            footer(ctx, e)
+            await ctx.send(embed=e)
+
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'memes':-1}})
+            if db.meme_collection.count({"id":meme['id'], "user_id":ctx.author.id}):
+                pass
+            else:
+                db.meme_collection.insert_one({"id":meme['id'], "user_id":ctx.author.id})
 
         except Exception as e:
             await botError(self.bot, ctx, e)
@@ -24,6 +37,10 @@ class GeneralCommands:
         try:
             if user is None:
                 user = ctx.author
+
+            if not db.profiles.find({"user_id":user.id}):
+                return await error(ctx, "Profile Error", f"{user.name} doesn't have a profile yet. He has to type atleast one message to register a profile.")
+
             for x in db.profiles.find({"user_id":user.id}):
                 is_private = x['is_private']
                 if is_private:
@@ -38,6 +55,7 @@ class GeneralCommands:
                     return await ctx.send(embed=e)
 
                 memes = x['memes']
+                upload_memes = x['memes']
 
             title = "Here all of your points."
             if user != ctx.author:
@@ -45,7 +63,8 @@ class GeneralCommands:
 
             e = discord.Embed(title=title, color=color()).set_thumbnail(url=user.avatar_url)
             e.description = f"""
-:small_orange_diamond: Memes : {x['memes']}
+:small_orange_diamond: Memes : {memes}
+:small_orange_diamond: Upload Memes : {upload_memes}
 """
             footer(ctx, e)
             await ctx.send(embed=e)
@@ -120,6 +139,12 @@ class GeneralCommands:
                 except:
                     pass
 
+                try:
+                    perks.append(['upload_memes', x['upload_memes']])
+                    break
+                except:
+                    pass
+
             for x in db.profiles.find({"user_id":ctx.author.id}):
                 user_coins = x['coins']
                 user_diamonds = x['diamonds']
@@ -139,6 +164,8 @@ class GeneralCommands:
             for i in perks:
                 if 'memes' in i:
                     data = {'$inc':{'memes':i[1]}}
+                elif 'upload_memes' in i:
+                    data = {'$inc':{'upload_memes':i[1]}}
 
             tries = []
 
