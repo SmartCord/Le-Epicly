@@ -55,7 +55,7 @@ class GeneralCommands:
                     return await ctx.send(embed=e)
 
                 memes = x['memes']
-                upload_memes = x['memes']
+                upload_memes = x['upload_memes']
 
             title = "Here all of your points."
             if user != ctx.author:
