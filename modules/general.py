@@ -16,7 +16,7 @@ class GeneralCommands:
 
             embeds = []
             for x in db.meme_collection.find({"user_id":ctx.author.id}):
-                e = discord.Embed(title=x['title'], url=x['article_url'], color=color())
+                e = discord.Embed(title=x['title'], url=x['source'], color=color())
                 e.set_image(url=x['image_url'])
                 footer(ctx, e)
                 embeds.append(e)
@@ -45,7 +45,7 @@ class GeneralCommands:
                 async with cs.get(url) as rep:
                     x = await rep.json()
 
-            e = discord.Embed(title=f"{x['title']}", url=x['article_url'], color=color())
+            e = discord.Embed(title=f"{x['title']}", url=x['source'], color=color())
             e.set_image(url=x['image_url'])
             footer(ctx, e)
             await ctx.send(embed=e)
@@ -54,7 +54,7 @@ class GeneralCommands:
 
             data = {
                 'title':x['title'],
-                'article_url':x['article_url'],
+                'source':x['article_url'],
                 'image_url':x['image_url'],
                 'user_id':ctx.author.id
             }
