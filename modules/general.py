@@ -54,7 +54,7 @@ class GeneralCommands:
 
             data = {
                 'title':x['title'],
-                'source':x['article_url'],
+                'source':x['source'],
                 'image_url':x['image_url'],
                 'user_id':ctx.author.id
             }
