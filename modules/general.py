@@ -9,7 +9,7 @@ class GeneralCommands:
     async def meme_collection(self, ctx):
         try:
             if not db.meme_collection.count({"user_id":ctx.author.id}):
-                e = discord.Embed(title="Collection empty", description=f"Your meme collection is empty, you have to use the `{returnPrefix(ctx)}meme` command atleast once.", color=color())
+                e = discord.Embed(title="Collection empty", description=f"Your meme collection is empty, you have to use the `{prefix(ctx)}meme` command atleast once.", color=color())
                 e.set_thumbnail(url=ctx.author.avatar_url)
                 footer(ctx, e)
                 return await ctx.send(embed=e)
@@ -32,7 +32,7 @@ class GeneralCommands:
         try:
             counter = [x['memes'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
             if counter < 1:
-                e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{returnPrefix(ctx)}meme_collection` command. To buy more meme points visit the store.", color=color())
+                e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{prefix(ctx)}meme_collection` command. To buy more meme points visit the store.", color=color())
                 footer(ctx, e)
                 e.set_thumbnail(url=ctx.author.avatar_url)
                 await ctx.send(embed=e)
