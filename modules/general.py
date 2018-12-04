@@ -6,28 +6,63 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command()
+    async def meme_collection(self, ctx):
+        try:
+            if not db.meme_collection.count({"user_id":ctx.author.id}):
+                e = discord.Embed(title="Collection empty", description=f"Your meme collection is empty, you have to use the `{returnPrefix(ctx)}meme` command atleast once.", color=color())
+                e.set_thumbnail(url=ctx.author.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            embeds = []
+            for x in db.meme_collection.find({"user_id":ctx.author.id}):
+                e = discord.Embed(title=x['title'], url=x['article_url'], color=color())
+                e.set_image(url=x['image_url'])
+                footer(ctx, e)
+                embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def meme(self, ctx):
         try:
             counter = [x['memes'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
             if counter < 1:
                 e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{returnPrefix(ctx)}meme_collection` command. To buy more meme points visit the store.", color=color())
                 footer(ctx, e)
-                e.set_thumbnail(url=ctx.me.avatar_url)
+                e.set_thumbnail(url=ctx.author.avatar_url)
                 await ctx.send(embed=e)
                 return
 
-            memes = [x for x in db.memes.find({})]
-            meme = random.choice(meme)
-            e = discord.Embed(title=f"{meme['title']}", url=meme['url'], color=color())
-            e.set_image(url=meme['image'])
+            url = "https://api.ksoft.si/images/random-meme"
+
+            token = config.ksoft
+            async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {token}"}) as cs:
+                async with cs.get(url) as rep:
+                    x = await rep.json()
+
+            e = discord.Embed(title=f"{x['title']}", url=x['article_url'], color=color())
+            e.set_image(url=x['image_url'])
             footer(ctx, e)
             await ctx.send(embed=e)
 
             db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'memes':-1}})
-            if db.meme_collection.count({"id":meme['id'], "user_id":ctx.author.id}):
+
+            data = {
+                'title':x['title'],
+                'article_url':x['article_url'],
+                'image_url':x['image_url'],
+                'user_id':ctx.author.id
+            }
+
+            if db.meme_collection.count(data):
                 pass
             else:
-                db.meme_collection.insert_one({"id":meme['id'], "user_id":ctx.author.id})
+                db.meme_collection.insert_one(data)
 
         except Exception as e:
             await botError(self.bot, ctx, e)
