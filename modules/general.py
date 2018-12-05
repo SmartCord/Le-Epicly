@@ -40,7 +40,7 @@ class GeneralCommands:
                 return await error(ctx, "Invalid URL", "The reddit post you provided is invalid, please make sure it's the correct link by visiting it.")
 
             if db.memes.count({"source":source}):
-                meme = [x['user_id'] for x in db.memes.find({"source":source})][0]
+                meme = [x['uploaded_by'] for x in db.memes.find({"source":source})][0]
                 e = discord.Embed(color=color())
                 if meme == "KSoft API":
                     e.title = "Oops an API have already uploaded that :("
