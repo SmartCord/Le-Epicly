@@ -35,7 +35,7 @@ class GeneralCommands:
             while connection is False:
                 try:
                     r = requests.get(url, headers=user_agent, proxies=proxies)
-                    connection = True
+                    connection = True #lol
                 except:
                     connection = False
 
