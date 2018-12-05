@@ -40,7 +40,7 @@ class GeneralCommands:
                 return
 
             memes = [y for y in db.memes.find({})]
-            x = random.choice(meme)
+            x = random.choice(memes)
 
             e = discord.Embed(title=f"{x['title']}", url=x['source'], color=color())
             e.set_image(url=x['image_url'])
