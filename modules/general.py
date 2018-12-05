@@ -55,7 +55,7 @@ class GeneralCommands:
                 image = image['href']
             except:
                 print(soup.find())
-                return await error(ctx, "Invalid URL", "The reddit post you provided is invalid, please make sure it's the correct link by visiting it.")
+                return await error(ctx, "Invalid URL", "The reddit post you provided is either invalid or the bot was blocked from reddit because of web scraping.") #
 
             if db.memes.count({"source":source}):
                 meme = [x['uploaded_by'] for x in db.memes.find({"source":source})][0]
