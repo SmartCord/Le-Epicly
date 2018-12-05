@@ -43,7 +43,7 @@ class GeneralCommands:
             x = random.choice(memes)
 
             e = discord.Embed(title=f"{x['title']}", url=x['source'], color=color())
-            e.set_image(url=x['image_url'])
+            e.set_image(url=x['image'])
             if x['uploaded_by'] ==  "KSoft API":
                 by = "From KSoft API"
             elif isinstance(x['uploaded_by'], int):
