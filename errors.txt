@@ -4,3 +4,6 @@ Profile Error :
 
 Length Error :
   The text you entered is too long
+
+Invalid URL :
+  The URL you entered is invalid

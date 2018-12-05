@@ -6,7 +6,7 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command() # 10 points
-    @commands.cooldown(3, 10, commands.BucketType.user)
+    @commands.cooldown(2, 10, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
         try:
             counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
@@ -16,7 +16,50 @@ class GeneralCommands:
             if url is None:
                 return await usage(ctx, ['reddit url'], ['https://www.reddit.com/r/dankmemes/comments/a372j6/bring_home_the_bagels/'], 'Lets you upload a meme to the overtimed meme database. (Only reddit links are currently supported for now)')
 
+            if not url.startswith('https://www.reddit.com/r/'):
+                if url.startswith('https://www.reddit.com/u/'):
+                    return await error(ctx, "Invalid URL", "Please provide a reddit post url not a user one.")
+                return await error(ctx, "Invalid URL", "Please provide a reddit post url.")
 
+            if not url.endswith('/'):
+                url += "/"
+
+            user_agent = random.choice(utils.user_agents)
+            r = requests.get(url, headers=user_agent)
+            page = r.text
+            soup = bsoup(page, 'html.parser')
+            source = url
+            uploaded_by = ctx.author.id
+            id = str(uuid.uuid4())
+            try:
+                title = soup.find('span', attrs={'class':'y8HYJ-y_lTUHkQIc1mdCq'}).text
+                image = soup.find('div', attrs={'class':'_3Oa0THmZ3f5iZXAQ0hBJ0k'})
+                image = image.find('a')
+                image = image['href']
+            except:
+                return await error(ctx, "Invalid URL", "The reddit post you provided is invalid, please make sure it's the correct link by visiting it.")
+
+            if db.memes.count({"source":source}):
+                meme = [x['user_id'] for x in db.memes.find({"source":source})][0]
+                e = discord.Embed(color=color())
+                if meme == "KSoft API":
+                    e.title = "Oops an API have already uploaded that :("
+                    e.description = "Sad to say but KSoft API have already uploaded that meme."
+                elif isinstance(meme, int):
+                    user = discord.utils.get(self.bot.get_all_members(), id=meme)
+                    if user is None:
+                        e.title = "That meme has already been uploaded by an unknown user"
+                        e.description = f"Unfortunately an unknown user with the id `{meme}` have already uploaded that meme."
+                    else:
+                        e.title = f"That meme has already been uploaded by {user}"
+                        e.description = f"Sorry but {user} have already uploaded that meme. Better luck next time :)"
+                footer(ctx, e)
+                e.set_thumbnail(url=ctx.author.avatar_url)
+                return await ctx.send(embed=e)
+
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-10}})
+
+            await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
 
         except Exception as e:
             await botError(self.bot, ctx, e)
