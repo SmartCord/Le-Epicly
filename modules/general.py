@@ -24,20 +24,20 @@ class GeneralCommands:
             if not url.endswith('/'):
                 url += "/"
 
-            user_agent = random.choice(utils.user_agents)
             proxies = utils.get_proxies()
-            chosen = random.choice(proxies)
-            proxies = {
-                "http": f'http://{chosen}',
-                "https": f'http://{chosen}'
-            }
+            #chosen = random.choice(proxies)
             connection = False
-            while connection is False:
+            for chosen in proxies:
+                user_agent = random.choice(utils.user_agents)
+                proxy = {
+                    "http": f'http://{chosen}',
+                    "https": f'http://{chosen}'
+                }
                 try:
-                    r = requests.get(url, headers=user_agent, proxies=proxies)
-                    connection = True #lol
+                    r = requests.get(url, headers=user_agent, proxies=proxy)
+                    break #lol
                 except:
-                    connection = False
+                    pass
 
             page = r.text
             soup = bsoup(page, 'html.parser')
