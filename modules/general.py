@@ -130,7 +130,7 @@ class GeneralCommands:
             if counter < 1:
                 return await pointless(ctx, "You can no longer see new memes. lel sad")
 
-            memes = [y for y in db.memes.find({'uploaded_by':ctx.author.id})]
+            memes = [y for y in db.memes.find({)]
             x = random.choice(memes)
 
             e = discord.Embed(title=f"{x['title']}", url=x['source'], color=color())
