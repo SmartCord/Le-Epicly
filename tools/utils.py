@@ -15,6 +15,11 @@ gif = {
     'enough1':'https://media.giphy.com/media/3oEduKiu3xvjkYvCww/200.gif'
 }
 
+def removekey(d, key):
+    r = dict(d)
+    del r[key]
+    return r
+
 def color():
     return random.choice([0x1bb596, 0x1ce1b9, 0x65f0d4, 0x68b5a6])
 

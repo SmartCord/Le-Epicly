@@ -26,6 +26,37 @@ class OwnerGay:
         self.bot = bot
         self._last_result = None
 
+    @commands.command()
+    @commands.is_owner()
+    async def start_meme_uploads(self, ctx):
+        try:
+            url = "https://api.ksoft.si/images/random-meme"
+            token = config.ksoft
+
+            while True:
+                async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {token}"}) as cs:
+                    async with cs.get(url) as rep:
+                        x = await rep.json()
+
+                data = {
+                    'id':str(uuid.uuid4()),
+                    'title':x['title'],
+                    'source':x['source'],
+                    'image':x['image'],
+                    'uploaded_by':'KSoft API'
+                }
+
+                if not db.memes.count({"source":x['source']}):
+                    db.memes.insert_one(data)
+                    print(x['source'])
+                else:
+                    print("Source already in DB : " + x['source'])
+
+                await asyncio.sleep(1)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
     @commands.command(pass_context=True, name="eval")
     @commands.is_owner()
     async def cool_eval_bullshit(self, ctx, *, body: str):

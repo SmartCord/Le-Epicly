@@ -15,11 +15,12 @@ class GeneralCommands:
                 return await ctx.send(embed=e)
 
             embeds = []
-            for x in db.meme_collection.find({"user_id":ctx.author.id}):
-                e = discord.Embed(title=x['title'], url=x['source'], color=color())
-                e.set_image(url=x['image_url'])
-                footer(ctx, e)
-                embeds.append(e)
+            for y in db.meme_collection.find({"user_id":ctx.author.id}):
+                for x in db.memes.find({"id":y['id']}):
+                    e = discord.Embed(title=x['title'], url=x['source'], color=color())
+                    e.set_image(url=x['image_url'])
+                    footer(ctx, e)
+                    embeds.append(e)
 
             p = paginator.EmbedPages(ctx, embeds=embeds)
             await p.paginate()
@@ -38,24 +39,26 @@ class GeneralCommands:
                 await ctx.send(embed=e)
                 return
 
-            url = "https://api.ksoft.si/images/random-meme"
-
-            token = config.ksoft
-            async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {token}"}) as cs:
-                async with cs.get(url) as rep:
-                    x = await rep.json()
+            x = db.memes.aggregate({'$sample':{"size":1}})
 
             e = discord.Embed(title=f"{x['title']}", url=x['source'], color=color())
             e.set_image(url=x['image_url'])
-            footer(ctx, e)
+            if x['uploaded_by'] ==  "KSoft API":
+                by = "From KSoft API"
+            elif isinstance(x['uploaded_by'], int):
+                by = discord.utils.get(self.bot.get_all_members(), id=x['uploaded_by'])
+                if by is None:
+                    by = "User cannot be found"
+                else:
+                    by = f"Uploaded by : {by}"
+
+            e.set_footer(text=f"Uploaded by : {by}")
             await ctx.send(embed=e)
 
             db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'memes':-1}})
 
             data = {
-                'title':x['title'],
-                'source':x['source'],
-                'image_url':x['image_url'],
+                'id':x['id'],
                 'user_id':ctx.author.id
             }
 
