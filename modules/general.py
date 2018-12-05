@@ -144,7 +144,7 @@ class GeneralCommands:
                     by = "User cannot be found"
                     icon_url = ctx.me.avatar_url
                 else:
-                    by = f"Uploaded by : {by}"
+                    by = f"Uploaded by : {xd}"
                     icon_url = xd.avatar_url
 
             e.set_footer(text=by, icon_url=icon_url)
