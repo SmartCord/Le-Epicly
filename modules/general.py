@@ -139,13 +139,13 @@ class GeneralCommands:
                 by = "From KSoft API"
                 icon_url = "https://cdn.ksoft.si/images/Logo1024-W.png"
             elif isinstance(x['uploaded_by'], int):
-                by = discord.utils.get(self.bot.get_all_members(), id=x['uploaded_by'])
-                if by is None:
+                xd = discord.utils.get(self.bot.get_all_members(), id=x['uploaded_by'])
+                if xd is None:
                     by = "User cannot be found"
                     icon_url = ctx.me.avatar_url
                 else:
                     by = f"Uploaded by : {by}"
-                    icon_url = by.avatar_url
+                    icon_url = xd.avatar_url
 
             e.set_footer(text=by, icon_url=icon_url)
             await ctx.send(embed=e)
