@@ -42,7 +42,7 @@ class OwnerGay:
                     'id':str(uuid.uuid4()),
                     'title':x['title'],
                     'source':x['source'],
-                    'image':x['image'],
+                    'image':x['image_url'],
                     'uploaded_by':'KSoft API'
                 }
 
