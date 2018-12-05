@@ -102,7 +102,7 @@ class GeneralCommands:
     @commands.command()
     async def my_memes(self, ctx):
         try:
-            if not db.memes.count({"user_id":ctx.author.id}):
+            if not db.memes.count({"uploaded_by":ctx.author.id}):
                 e = discord.Embed(title="Sad no memes", description=f"Sorry but you have not yet uploaded any memes. You can upload one by using the `{prefix(ctx)}upload_meme` command.", color=color())
                 e.set_thumbnail(url=ctx.author.avatar_url)
                 footer(ctx, e)
