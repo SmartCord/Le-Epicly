@@ -6,6 +6,7 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command() # 10 points
+    @commands.cooldown(3, 10, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
         try:
             counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
@@ -15,7 +16,7 @@ class GeneralCommands:
             if url is None:
                 return await usage(ctx, ['reddit url'], ['https://www.reddit.com/r/dankmemes/comments/a372j6/bring_home_the_bagels/'], 'Lets you upload a meme to the overtimed meme database. (Only reddit links are currently supported for now)')
 
-            
+
 
         except Exception as e:
             await botError(self.bot, ctx, e)
@@ -67,7 +68,7 @@ class GeneralCommands:
                     by = f"Uploaded by : {by}"
                     icon_url = by.avatar_url
 
-            e.set_footer(text=by, icon_url=)
+            e.set_footer(text=by, icon_url=icon_url)
             await ctx.send(embed=e)
 
             db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-4}})
