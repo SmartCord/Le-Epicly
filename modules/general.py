@@ -5,7 +5,7 @@ class GeneralCommands:
         self.bot = bot
         self.bot.remove_command('help')
 
-    @commands.command() # 10 points
+    @commands.command() # 20 points
     @commands.cooldown(2, 10, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
         try:
@@ -57,7 +57,7 @@ class GeneralCommands:
                 e.set_thumbnail(url=ctx.author.avatar_url)
                 return await ctx.send(embed=e)
 
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-10}})
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-20}})
 
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
 
@@ -522,7 +522,7 @@ If you want to cancel then press :x:
 :arrow_up: Level : {x['level']}
 :heart: Reputation : {x['reputation']}
 :large_blue_diamond: Achievements : {len(x['achievements'])}
-:small_orange_diamond: : {x['points']}
+:small_orange_diamond: Points : {x['points']}
 
 :label: Profile Description : {description}
 """
