@@ -39,7 +39,7 @@ class GeneralCommands:
                 await ctx.send(embed=e)
                 return
 
-            x = db.memes.aggregate({'$sample':{"size":1}})
+            x = db.memes.aggregate([{'$sample':{"size":1}}])
 
             e = discord.Embed(title=f"{x['title']}", url=x['source'], color=color())
             e.set_image(url=x['image_url'])
