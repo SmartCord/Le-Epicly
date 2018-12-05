@@ -25,7 +25,20 @@ class GeneralCommands:
                 url += "/"
 
             user_agent = random.choice(utils.user_agents)
-            r = requests.get(url, headers=user_agent)
+            proxies = utils.get_proxies()
+            chosen = random.choice(proxies)
+            proxies = {
+                "http": f'http://{chosen}',
+                "https": f'http://{chosen}'
+            }
+            connection = False
+            while connection is False:
+                try:
+                    r = requests.get(url, headers=user_agent, proxies=proxies)
+                    connection = True
+                except:
+                    connection = False
+
             page = r.text
             soup = bsoup(page, 'html.parser')
             source = url
