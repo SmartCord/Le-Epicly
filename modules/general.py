@@ -45,6 +45,9 @@ class GeneralCommands:
                 if meme == "KSoft API":
                     e.title = "Oops an API have already uploaded that :("
                     e.description = "Sad to say but KSoft API have already uploaded that meme."
+                elif meme == ctx.author.id:
+                    e.title = "You already uploaded that..."
+                    e.description = f"Sorry but you have already uploaded that meme."
                 elif isinstance(meme, int):
                     user = discord.utils.get(self.bot.get_all_members(), id=meme)
                     if user is None:
@@ -57,7 +60,16 @@ class GeneralCommands:
                 e.set_thumbnail(url=ctx.author.avatar_url)
                 return await ctx.send(embed=e)
 
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-20}})
+            data = {
+                'id':id,
+                'title':title,
+                'source':source,
+                'image':image,
+                'uploaded_by':uploaded_by
+            }
+            db.memes.insert_one(data)
+
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-30}})
 
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
 
@@ -87,7 +99,31 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
+    @commands.command()
+    async def my_memes(self, ctx):
+        try:
+            if not db.memes.count({"user_id":ctx.author.id}):
+                e = discord.Embed(title="Sad no memes", description=f"Sorry but you have not yet uploaded any memes. You can upload one by using the `{prefix(ctx)}upload_meme` command.", color=color())
+                e.set_thumbnail(url=ctx.author.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            embeds = []
+            for x in db.memes.find({"uploaded_by":ctx.author.id}):
+                e = discord.Embed(title=x['title'], url=x['source'], color=color())
+                e.set_image(url=x['image'])
+                footer(ctx, e)
+                embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
+
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
     @commands.command() # 4 points
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def meme(self, ctx):
         try:
             counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
