@@ -50,6 +50,7 @@ class GeneralCommands:
                 image = image.find('a')
                 image = image['href']
             except:
+                print(soup.find())
                 return await error(ctx, "Invalid URL", "The reddit post you provided is invalid, please make sure it's the correct link by visiting it.")
 
             if db.memes.count({"source":source}):
