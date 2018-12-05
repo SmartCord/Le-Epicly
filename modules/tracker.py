@@ -35,8 +35,7 @@ class Tracker:
                 "reppers":[],
                 "achievements":[],
                 "items":[],
-                "memes":5,
-                "upload_memes":0
+                "points":100
             }
             return db.profiles.insert_one(data)
 

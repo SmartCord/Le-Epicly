@@ -6,6 +6,12 @@ class AchievementNotFound(Exception):
 class UserNotFound(Exception):
     pass
 
+async def pointless(ctx, title):
+    e = discord.Embed(title=title, description="Sorry but you have used up all of your points. You can buy more points from the store if you want.", color=color())
+    e.set_thumbnail(url=ctx.author.avatar_url)
+    footer(ctx, e)
+    await ctx.send(embed=e)
+
 async def giveAchievement(user, id):
     if not db.achievements.count({"id":id}):
         raise AchievementNotFound('Srry mate but that achievement is not found. hehehe gaddem')

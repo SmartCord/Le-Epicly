@@ -15,6 +15,8 @@ gif = {
     'enough1':'https://media.giphy.com/media/3oEduKiu3xvjkYvCww/200.gif'
 }
 
+user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+
 def removekey(d, key):
     r = dict(d)
     del r[key]

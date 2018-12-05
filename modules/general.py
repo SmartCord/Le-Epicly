@@ -5,6 +5,21 @@ class GeneralCommands:
         self.bot = bot
         self.bot.remove_command('help')
 
+    @commands.command() # 10 points
+    async def upload_meme(self, ctx, url: str = None):
+        try:
+            counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+            if counter < 1:
+                return await pointless(ctx, "You can no longer upload memes")
+
+            if url is None:
+                return await usage(ctx, ['reddit url'], ['https://www.reddit.com/r/dankmemes/comments/a372j6/bring_home_the_bagels/'], 'Lets you upload a meme to the overtimed meme database. (Only reddit links are currently supported for now)')
+
+            
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
     @commands.command()
     async def meme_collection(self, ctx):
         try:
@@ -28,16 +43,12 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
-    @commands.command()
+    @commands.command() # 4 points
     async def meme(self, ctx):
         try:
-            counter = [x['memes'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+            counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
             if counter < 1:
-                e = discord.Embed(title="Oops no more memes for you", description=f"Sorry but you have used all of your meme points. Luckily all of the memes you have seen has been saved to your meme collection. You can access your meme collection using the `{prefix(ctx)}meme_collection` command. To buy more meme points visit the store.", color=color())
-                footer(ctx, e)
-                e.set_thumbnail(url=ctx.author.avatar_url)
-                await ctx.send(embed=e)
-                return
+                return await pointless(ctx, "You can no longer see new memes. lel sad")
 
             memes = [y for y in db.memes.find({})]
             x = random.choice(memes)
@@ -46,17 +57,20 @@ class GeneralCommands:
             e.set_image(url=x['image'])
             if x['uploaded_by'] ==  "KSoft API":
                 by = "From KSoft API"
+                icon_url = "https://cdn.ksoft.si/images/Logo1024-W.png"
             elif isinstance(x['uploaded_by'], int):
                 by = discord.utils.get(self.bot.get_all_members(), id=x['uploaded_by'])
                 if by is None:
                     by = "User cannot be found"
+                    icon_url = ctx.me.avatar_url
                 else:
                     by = f"Uploaded by : {by}"
+                    icon_url = by.avatar_url
 
-            e.set_footer(text=f"Uploaded by : {by}")
+            e.set_footer(text=by, icon_url=)
             await ctx.send(embed=e)
 
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'memes':-1}})
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-4}})
 
             data = {
                 'id':x['id'],
@@ -71,47 +85,49 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
+    # @commands.command()
+    # @commands.cooldown
+    # async def points(self, ctx, user: discord.Member = None):
+        # try:
+            # if user is None:
+                # user = ctx.author
+#
+            # if not db.profiles.find({"user_id":user.id}):
+                # return await error(ctx, "Profile Error", f"{user.name} doesn't have a profile yet. He has to type atleast one message to register a profile.")
+#
+            # for x in db.profiles.find({"user_id":user.id}):
+                # is_private = x['is_private']
+                # if is_private:
+                    # if user is ctx.author:
+                        # e = discord.Embed(title="Your profile is private", description="You have decided to set your profile to private. How can you forget about that?", color=color())
+                        # e.set_thumbnail(url=user.avatar_url)
+                        # footer(ctx, e)
+                        # return await ctx.send(embed=e)
+                    # e = discord.Embed(title="Profile is private", description=f"Sorry but big man {user.name} wants some privacy and has decided to set his profile to be viewed only by him.", color=color())
+                    # e.set_thumbnail(url=user.avatar_url)
+                    # footer(ctx, e)
+                    # return await ctx.send(embed=e)
+#
+                # memes = x['memes']
+                # upload_memes = x['upload_memes']
+#
+            # title = "Here all of your points."
+            # if user != ctx.author:
+                # title = f"Here are all of {user.name}'s points."
+#
+            # e = discord.Embed(title=title, color=color()).set_thumbnail(url=user.avatar_url)
+            # e.description = f"""
+# :small_orange_diamond: Memes : {memes}
+# :small_orange_diamond: Upload Memes : {upload_memes}
+# """
+            # footer(ctx, e)
+            # await ctx.send(embed=e)
+#
+        # except Exception as e:
+            # await botError(self.bot, ctx, e)
+
     @commands.command()
-    async def points(self, ctx, user: discord.Member = None):
-        try:
-            if user is None:
-                user = ctx.author
-
-            if not db.profiles.find({"user_id":user.id}):
-                return await error(ctx, "Profile Error", f"{user.name} doesn't have a profile yet. He has to type atleast one message to register a profile.")
-
-            for x in db.profiles.find({"user_id":user.id}):
-                is_private = x['is_private']
-                if is_private:
-                    if user is ctx.author:
-                        e = discord.Embed(title="Your profile is private", description="You have decided to set your profile to private. How can you forget about that?", color=color())
-                        e.set_thumbnail(url=user.avatar_url)
-                        footer(ctx, e)
-                        return await ctx.send(embed=e)
-                    e = discord.Embed(title="Profile is private", description=f"Sorry but big man {user.name} wants some privacy and has decided to set his profile to be viewed only by him.", color=color())
-                    e.set_thumbnail(url=user.avatar_url)
-                    footer(ctx, e)
-                    return await ctx.send(embed=e)
-
-                memes = x['memes']
-                upload_memes = x['upload_memes']
-
-            title = "Here all of your points."
-            if user != ctx.author:
-                title = f"Here are all of {user.name}'s points."
-
-            e = discord.Embed(title=title, color=color()).set_thumbnail(url=user.avatar_url)
-            e.description = f"""
-:small_orange_diamond: Memes : {memes}
-:small_orange_diamond: Upload Memes : {upload_memes}
-"""
-            footer(ctx, e)
-            await ctx.send(embed=e)
-
-        except Exception as e:
-            await botError(self.bot, ctx, e)
-
-    @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def store(self, ctx):
         try:
             pg = commands.Paginator(prefix="", suffix="", max_size=1022)
@@ -141,6 +157,7 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command(aliases=['purchase'])
+    @commands.cooldown(1, 4, commands.BucketType.user)
     async def buy(self, ctx, *, item: str = None):
         try:
             if item is None:
@@ -154,17 +171,6 @@ class GeneralCommands:
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
-            e = discord.Embed(title="What do you want to purchase with?", description="Choose by clicking one of the reactions below.", color=color())
-            e.set_thumbnail(url=ctx.me.avatar_url)
-            footer(ctx, e)
-            embed = await ctx.send(embed=e)
-            coin = self.bot.get_emoji(514791023671509003)
-            diamond = self.bot.get_emoji(515536803407593486)
-            await embed.add_reaction(coin)
-            await embed.add_reaction(diamond)
-
-            def check(reaction, user):
-                return user == ctx.author
 
             perks = []
 
@@ -173,16 +179,28 @@ class GeneralCommands:
                 coins = x['coins']
                 diamonds = x['diamonds']
                 try:
-                    perks.append(['memes', x['memes']])
+                    perks.append(['points', x['points']])
                     break
                 except:
                     pass
 
-                try:
-                    perks.append(['upload_memes', x['upload_memes']])
-                    break
-                except:
-                    pass
+                # try:
+                    # perks.append(['upload_memes', x['upload_memes']])
+                    # break
+                # except:
+                    # pass
+
+            coin = self.bot.get_emoji(514791023671509003)
+            diamond = self.bot.get_emoji(515536803407593486)
+            e = discord.Embed(title="What do you want to purchase with?", description=f"Choose by clicking one of the reactions below.\n{coin} Price on coins : {coins}\n{diamond} Price on diamonds : {diamonds}", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            embed = await ctx.send(embed=e)
+            await embed.add_reaction(coin)
+            await embed.add_reaction(diamond)
+
+            def check(reaction, user):
+                return user == ctx.author
 
             for x in db.profiles.find({"user_id":ctx.author.id}):
                 user_coins = x['coins']
@@ -201,10 +219,10 @@ class GeneralCommands:
             x = False
 
             for i in perks:
-                if 'memes' in i:
-                    data = {'$inc':{'memes':i[1]}}
-                elif 'upload_memes' in i:
-                    data = {'$inc':{'upload_memes':i[1]}}
+                if 'points' in i:
+                    data = {'$inc':{'points':i[1]}}
+                # elif 'upload_memes' in i:
+                    # data = {'$inc':{'upload_memes':i[1]}}
 
             tries = []
 
@@ -282,6 +300,7 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    @commands.cooldown(2, 100, commands.BucketType.user)
     async def change_privacy(self, ctx, data: str = None):
         try:
             if data is None:
@@ -313,10 +332,13 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
-    @commands.command()
-    @commands.cooldown(1, 300, commands.BucketType.user)
+    @commands.command() # 2 points
+    @commands.cooldown(2, 300, commands.BucketType.user)
     async def rep(self, ctx, user: discord.Member = None):
         try:
+            counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+            if counter < 1:
+                return await pointless(ctx, "You can no longer give users reputation points")
             if user is None:
                 return await usage(ctx, ['mention a user'], [ctx.author.mention], "Gives the mentioned user a reputation point.")
 
@@ -340,6 +362,8 @@ class GeneralCommands:
             db.profiles.update_one({"user_id":user.id}, {'$inc':{'reputation':1}})
             db.profiles.update_one({"user_id":user.id}, {'$push':{'reppers':ctx.author.id}})
 
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-2}})
+
 
             await success(ctx, f"Successfully gave {user.name} one reputation point.", user.avatar_url)
 
@@ -347,6 +371,7 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    @commands.cooldown(2, 300, commands.BucketType.user)
     async def profile_description(self, ctx, *, new: str = None):
         try:
             if new is None:
@@ -359,7 +384,7 @@ class GeneralCommands:
                 db.profiles.update_one({"user_id":ctx.author.id}, {'$set':{'description':new}})
                 return await success(ctx, f"Successfully set your profile description to `{new}`.")
             else:
-                e = discord.Embed(title="Just making sure...", description=f"""
+                e = discord.Embed(title="Just making sure you know", description=f"""
 This will override your current description.
 
 Current description : `{olddesc}`
@@ -401,6 +426,7 @@ If you want to cancel then press :x:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    @commands.cooldown(1, 4, commands.BucketType.user)
     async def profile(self, ctx, user: discord.Member = None):
         try:
             if user is None:
@@ -452,6 +478,7 @@ If you want to cancel then press :x:
 :arrow_up: Level : {x['level']}
 :heart: Reputation : {x['reputation']}
 :large_blue_diamond: Achievements : {len(x['achievements'])}
+:small_orange_diamond: : {x['points']}
 
 :label: Profile Description : {description}
 """

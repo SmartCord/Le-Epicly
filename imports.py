@@ -1,5 +1,6 @@
 from discord.ext import commands
 from tools import utils, config
+from tools.bot_utils import pointless
 from tools.bot_tools import db
 import paginator
 from pathlib import Path
