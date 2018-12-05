@@ -18,7 +18,7 @@ class GeneralCommands:
             for y in db.meme_collection.find({"user_id":ctx.author.id}):
                 for x in db.memes.find({"id":y['id']}):
                     e = discord.Embed(title=x['title'], url=x['source'], color=color())
-                    e.set_image(url=x['image_url'])
+                    e.set_image(url=x['image'])
                     footer(ctx, e)
                     embeds.append(e)
 
