@@ -4,6 +4,7 @@ class GeneralCommands:
     def __init__(self, bot):
         self.bot = bot
         self.bot.remove_command('help')
+        self.purchases = []
 
     @commands.command() # 30 points
     @commands.cooldown(2, 15, commands.BucketType.user)
@@ -265,12 +266,38 @@ class GeneralCommands:
                 return await usage(ctx, ['item name'], ['i like memes'], 'Lets you purchase an item from the store.')
 
             item = item.upper()
+            appended_data = [ctx.author.id, ctx.channel.id]
 
             if not db.store.count({"name_upper":item}):
                 e = discord.Embed(title="That item doesn't exist", description="Sorry mate but the item you entered doesn't exist. Please make sure the spelling is correct and there are no extra characters.", color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 return await ctx.send(embed=e)
+
+            ongoing = False
+            for i in self.purchases:
+                if ctx.author.id in i:
+                    ongoing = True
+                    channel_id = i[1]
+                    break
+
+            if ongoing:
+                channel = discord.utils.get(self.bot.get_all_channels(), id=channel_id)
+                if not channel is None:
+                    guild = channel.guild
+                    e = discord.Embed(title="You currently have an ongoing purchase", color=color())
+                    footer(ctx, e)
+                    e.set_thumbnail(url=ctx.author.avatar_url)
+                    if channel == ctx.channel:
+                        e.description = f"You currently have an ongoing purchase in this specific channel."
+                    elif guild == ctx.guild:
+                        e.description = f"You currently have an ongoing purchase in the channel {channel.mention}."
+                    else:
+                        e.description = f"You currently have an ongoing purchase in the channel {channel.name} in the server {guild.name}"
+
+                    return await ctx.send(embed=e)
+                self.purchases.remove(appended_data)
+
 
 
             perks = []
@@ -299,6 +326,8 @@ class GeneralCommands:
             embed = await ctx.send(embed=e)
             await embed.add_reaction(coin)
             await embed.add_reaction(diamond)
+
+            self.purchases.append(appended_data)
 
             def check(reaction, user):
                 return user == ctx.author
@@ -332,6 +361,7 @@ class GeneralCommands:
                     try:
                         reaction, message = await self.bot.wait_for('reaction_add', check=check, timeout=20.0)
                     except asyncio.TimeoutError:
+                        self.purchases.remove(appended_data)
                         return await ctx.send("Timedout")
 
                 if reaction.emoji == coin:
@@ -346,6 +376,7 @@ class GeneralCommands:
                         else:
                             if len(tries) >= 1:
                                 e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
+                                self.purchases.remove(appended_data)
                                 return await ctx.send(embed=e)
                         await ctx.send(embed=e)
                     else:
@@ -373,6 +404,7 @@ class GeneralCommands:
                         else:
                             if len(tries) >= 1:
                                 e.description += " Since you have tried all payment methods with no luck, I have decided to cancel the process for you."
+                                self.purchases.remove(appended_data)
                                 return await ctx.send(embed=e)
                         await ctx.send(embed=e)
                     else:
@@ -390,12 +422,14 @@ class GeneralCommands:
                         x = True
                 else:
                     can = await ctx.send("Successfully canceled the process cause you added a different reaction. lel")
+                    self.purchases.remove(appended_data)
                     await embed_msg.delete()
                     await asyncio.sleep(8)
                     await can.delete()
                     return
 
             await success(ctx, f"Successfully purchased the item `{name}`, {message}")
+            self.purchases.remove(appended_data)
 
         except Exception as e:
             await botError(self.bot, ctx, e)
