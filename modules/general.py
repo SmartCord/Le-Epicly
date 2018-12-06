@@ -5,13 +5,12 @@ class GeneralCommands:
         self.bot = bot
         self.bot.remove_command('help')
 
-    @commands.command() # 20 points
+    @commands.command() # 30 points
     @commands.cooldown(2, 15, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
         try:
-            counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
-            if counter < 1:
-                return await pointless(ctx, "You can no longer upload memes")
+            if await pointless(ctx, 30):
+                return
 
             if url is None:
                 return await usage(ctx, ['reddit url'], ['https://www.reddit.com/r/dankmemes/comments/a372j6/bring_home_the_bagels/'], 'Lets you upload a meme to the overtimed meme database. (Only reddit links are currently supported for now)')
@@ -149,9 +148,8 @@ class GeneralCommands:
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def meme(self, ctx):
         try:
-            counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
-            if counter < 1:
-                return await pointless(ctx, "You can no longer see new memes. lel sad")
+            if await pointless(ctx, 4):
+                return
 
             memes = [y for y in db.memes.find({})]
             x = random.choice(memes)
@@ -435,13 +433,13 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
-    @commands.command() # 2 points
-    @commands.cooldown(2, 300, commands.BucketType.user)
-    async def rep(self, ctx, user: discord.Member = None):
+    @commands.command() # 4 points
+    @commands.cooldown(2, 50, commands.BucketType.user)
+    async def rep(self, ctx, *, user: discord.Member = None):
         try:
-            counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
-            if counter < 1:
-                return await pointless(ctx, "You can no longer give users reputation points")
+            if await pointless(ctx, 4):
+                return
+
             if user is None:
                 return await usage(ctx, ['mention a user'], [ctx.author.mention], "Gives the mentioned user a reputation point.")
 
