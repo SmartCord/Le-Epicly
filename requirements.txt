@@ -4,3 +4,4 @@ Pillow
 requests
 beautifulsoup4
 lxml
+praw
