@@ -6,7 +6,7 @@ class GeneralCommands:
         self.bot.remove_command('help')
 
     @commands.command() # 20 points
-    @commands.cooldown(2, 10, commands.BucketType.user)
+    @commands.cooldown(2, 15, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
         try:
             counter = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
@@ -54,8 +54,13 @@ class GeneralCommands:
                 image = image.find('a')
                 image = image['href']
             except:
-                print(soup.find())
-                return await error(ctx, "Invalid URL", "The reddit post you provided is either invalid or the bot was blocked from reddit because of web scraping.") #
+                try:
+                    source_id = source.split('comments/')[1].split('/')[0]
+                    submission = reddit.submission(id=source_id)
+                    title = submission.title
+                    image = submission.url
+                except:
+                    return await error(ctx, "Invalid URL", "The reddit post you provided is invalid.") #
 
             if db.memes.count({"source":source}):
                 meme = [x['uploaded_by'] for x in db.memes.find({"source":source})][0]
