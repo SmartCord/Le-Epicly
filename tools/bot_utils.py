@@ -27,7 +27,7 @@ async def pointless(ctx, required_points):
 
 async def giveAchievement(user, id):
     if not db.achievements.count({"id":id}):
-        raise AchievementNotFound('Srry mate but that achievement is not found. hehehe gaddem')
+        raise AchievementNotFound('Sorry mate but that achievement is not found. hehehe gaddem')
 
     if not db.profiles.count({"user_id":user.id}):
         raise UserNotFound('How sad :(')
