@@ -574,8 +574,8 @@ If you want to cancel then press :x:
                     description = x['description']
 
                 memes_uploaded = 0
-                if db.memes.count({"uploaded_by":ctx.author.id}):
-                    memes_uploaded = len([x for x in db.memes.find({'uploaded_by':ctx.author.id})])
+                if db.memes.count({"uploaded_by":user.id}):
+                    memes_uploaded = len([x for x in db.memes.find({'uploaded_by':user.id})])
 
                 e.description = f"""
 <:gold:514791023671509003> Coins : {coins}
