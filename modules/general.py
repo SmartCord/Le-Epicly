@@ -586,7 +586,7 @@ If you want to cancel then press :x:
 :heart: Reputation : {x['reputation']}
 :large_blue_diamond: Achievements : {len(x['achievements'])}
 :small_orange_diamond: Points : {x['points']}
-<:mad:520157535680987167> Memes Uploaded : {x['']}
+<:mad:520157535680987167> Memes Uploaded : {memes_uploaded}
 
 :label: Profile Description : {description}
 """
