@@ -289,11 +289,11 @@ class GeneralCommands:
                     footer(ctx, e)
                     e.set_thumbnail(url=ctx.author.avatar_url)
                     if channel == ctx.channel:
-                        e.description = f"You currently have an ongoing purchase in this specific channel."
+                        e.description = f"You currently have an ongoing purchase in this specific channel. Please finish that purchase or wait for it to time out."
                     elif guild == ctx.guild:
-                        e.description = f"You currently have an ongoing purchase in the channel {channel.mention}."
+                        e.description = f"You currently have an ongoing purchase in the channel {channel.mention}. Please finish that purchase or wait for it to time out."
                     else:
-                        e.description = f"You currently have an ongoing purchase in the channel {channel.name} in the server {guild.name}"
+                        e.description = f"You currently have an ongoing purchase in the channel {channel.name} in the server {guild.name}. Please finish that purchase or wait for it to time out."
 
                     return await ctx.send(embed=e)
                 self.purchases.remove(appended_data)
