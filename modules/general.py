@@ -497,7 +497,7 @@ class GeneralCommands:
             db.profiles.update_one({"user_id":user.id}, {'$inc':{'reputation':1}})
             db.profiles.update_one({"user_id":user.id}, {'$push':{'reppers':ctx.author.id}})
 
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-2}})
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-4}})
 
 
             await success(ctx, f"Successfully gave {user.name} one reputation point.", user.avatar_url)
