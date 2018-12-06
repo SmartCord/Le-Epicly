@@ -573,6 +573,10 @@ If you want to cancel then press :x:
                 else:
                     description = x['description']
 
+                memes_uploaded = 0
+                if db.memes.count({"uploaded_by":ctx.author.id}):
+                    memes_uploaded = len([x for x in db.memes.find({'uploaded_by':ctx.author.id})])
+
                 e.description = f"""
 <:gold:514791023671509003> Coins : {coins}
 <:starwhite:515866275503931393> XP : {x['xp']}/{x['max_xp']}
@@ -582,6 +586,7 @@ If you want to cancel then press :x:
 :heart: Reputation : {x['reputation']}
 :large_blue_diamond: Achievements : {len(x['achievements'])}
 :small_orange_diamond: Points : {x['points']}
+<:mad:520157535680987167> Memes Uploaded : {x['']}
 
 :label: Profile Description : {description}
 """
