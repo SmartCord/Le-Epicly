@@ -19,7 +19,7 @@ class Utilities:
     async def profiles_count(self, ctx):
         try:
             amount = db.profiles.count({})
-            since_restart = Counters.since_restart
+            since_restart = Counters.profiles_since_restart
             e = discord.Embed(title="Profiles Counter", description=f"""
 Total amount of profiles in the database : {amount}
 Total amount of profiles created since restart : {since_restart}
