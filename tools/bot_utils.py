@@ -35,9 +35,12 @@ async def giveAchievement(user, id):
     if not db.profiles.count({"user_id":user.id}):
         raise UserNotFound('How sad :(')
 
-    achievements = [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]
-    if not id in achievements:
-        db.profiles.update_one({"user_id":user.id}, {'$push':{'achievements':id}})
+    if id in [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]:
+        return 
+
+    #achievements = [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]
+    #if not id in achievements:
+    db.profiles.update_one({"user_id":user.id}, {'$push':{'achievements':id}})
 
     for x in db.achievements.find({"id":id}):
         reward = f"<:gold:514791023671509003> {x['coins']} Coins\n<:diagay:515536803407593486> {x['diamonds']} Diamonds"

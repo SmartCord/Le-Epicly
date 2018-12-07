@@ -691,6 +691,7 @@ If you want to cancel then press :x:
             frames[0].save(b, save_all=True, append_images=frames[1:], format='gif', loop=0, duration=20, disposal=2,
                            optimize=True)
             b.seek(0)
+            await bot_utils.giveAchievement(ctx.author, 1)
             await ctx.send(file=discord.File(b, "ping.gif"))
         except Exception as e:
             await utils.botError(self.bot, ctx, e)

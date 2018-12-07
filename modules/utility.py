@@ -23,7 +23,7 @@ class Utilities:
             e = discord.Embed(title="Profiles Counter", description=f"""
 Total amount of profiles in the database : {amount}
 Total amount of profiles created since restart : {since_restart}
-""")
+""", color=color())
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
             await ctx.send(embed=e)
