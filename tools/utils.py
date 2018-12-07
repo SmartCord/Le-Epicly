@@ -3,7 +3,7 @@ import datetime, random
 from tools.bot_tools import db
 from lxml.html import fromstring
 import requests
-import bot_utils
+from tools import bot_utils
 
 default_prefix = "?"
 c = 0x0a91ff
