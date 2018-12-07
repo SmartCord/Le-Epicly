@@ -28,7 +28,9 @@ async def pointless(ctx, required_points):
         return await ctx.send(embed=e), True
     return False
 
-async def giveAchievement(user, id, for=""):
+async def giveAchievement(user, id, extra=None):
+    if extra is None:
+        extra = ""
 
     if not db.achievements.count({"id":id}):
         raise AchievementNotFound('Sorry mate but that achievement is not found. hehehe gaddem')

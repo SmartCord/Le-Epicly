@@ -50,7 +50,7 @@ class Tracker:
 
         for x in db.profiles.find({"user_id":author}):
             if x['messages'] == 2000:
-                await giveAchievement(message.author, 0, for="for sending 2000 messages")
+                await giveAchievement(message.author, 0, extra="for sending 2000 messages")
 
             if x['xp'] >= x['max_xp']:
                 db.profiles.update_one({"user_id":author}, {'$set':{'xp':1}})
