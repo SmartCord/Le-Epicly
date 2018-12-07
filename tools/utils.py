@@ -141,6 +141,8 @@ async def botError(bot, message, e):
     em = discord.Embed(title="Oh well an unexpected error has occured", description=f"```{e}```\nThe error has now been sent to the bot developer. (Thank goodness)", color=r)
     em.set_thumbnail(url=gif['disappointed1'])
     footer(message, em)
+    # ** THE FOLLOWING PART IS JUST FOR OVERTIMED ** #
+    await giveAchievement(message.author, 4, extra="for finding an error, Thanks for helping out captain")
     await message.send(embed=em)
 
     # ** THE FOLLOWING PART IS JUST FOR OVERTIMED ** #
