@@ -4,33 +4,6 @@ from tools.bot_tools import db
 from lxml.html import fromstring
 import requests
 
-# this function was cloned (Had to clone it cause i have no idea how to fix the issue i'm having, it has something to do with imports)
-
-async def giveAchievement(user, id, extra=None):
-    if extra is None:
-        extra = ""
-
-    # if not db.achievements.count({"id":id}):
-        # raise AchievementNotFound('Sorry mate but that achievement is not found. hehehe gaddem')
-#
-    # if not db.profiles.count({"user_id":user.id}):
-        # raise UserNotFound('How sad :(')
-
-    achievements = [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]
-
-    if id in achievements:
-        return
-
-    #if not id in achievements:
-    db.profiles.update_one({"user_id":user.id}, {'$push':{'achievements':id}})
-
-    for x in db.achievements.find({"id":id}):
-        reward = f"<:gold:514791023671509003> {x['coins']} Coins\n<:diagay:515536803407593486> {x['diamonds']} Diamonds"
-        e = discord.Embed(title=f"Wow New Achievement! Such cool", description=f":clap: Congratulations {user.name} you just obtained the achievement {x['name']} {extra}. :clap:\n\nOh and here are your rewards\n{reward}", color=color())
-        e.set_thumbnail(url=utils.gif['clap1'])
-        footer(user, e)
-        await user.send(embed=e)
-        db.profiles.update_one({"user_id":user.id}, {'$inc':{'coins':x['coins'], 'diamonds':x['diamonds']}})
 
 default_prefix = "?"
 c = 0x0a91ff
@@ -162,6 +135,34 @@ def footer(ctx, embed, extra=None):
     else:
         extra = " " + extra
     embed.set_footer(text=f"{author}{extra}", icon_url=avatar)
+
+# the following function was cloned (Had to clone it cause i have no idea how to fix the issue i'm having, it has something to do with imports)
+
+async def giveAchievement(user, id, extra=None):
+    if extra is None:
+        extra = ""
+
+    # if not db.achievements.count({"id":id}):
+        # raise AchievementNotFound('Sorry mate but that achievement is not found. hehehe gaddem')
+#
+    # if not db.profiles.count({"user_id":user.id}):
+        # raise UserNotFound('How sad :(')
+
+    achievements = [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]
+
+    if id in achievements:
+        return
+
+    #if not id in achievements:
+    db.profiles.update_one({"user_id":user.id}, {'$push':{'achievements':id}})
+
+    for x in db.achievements.find({"id":id}):
+        reward = f"<:gold:514791023671509003> {x['coins']} Coins\n<:diagay:515536803407593486> {x['diamonds']} Diamonds"
+        e = discord.Embed(title=f"Wow New Achievement! Such cool", description=f":clap: Congratulations {user.name} you just obtained the achievement {x['name']} {extra}. :clap:\n\nOh and here are your rewards\n{reward}", color=color())
+        e.set_thumbnail(url=gif['clap1'])
+        footer(user, e)
+        await user.send(embed=e)
+        db.profiles.update_one({"user_id":user.id}, {'$inc':{'coins':x['coins'], 'diamonds':x['diamonds']}})
 
 async def botError(bot, message, e):
     e = traceback.format_exc()
