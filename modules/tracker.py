@@ -37,6 +37,7 @@ class Tracker:
                 "items":[],
                 "points":100
             }
+            Counter.profiles_since_restart += 1
             return db.profiles.insert_one(data)
 
 

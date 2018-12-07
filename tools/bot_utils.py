@@ -1,5 +1,8 @@
 from imports import *
 
+class Counters:
+    profiles_since_restart = 0
+
 class AchievementNotFound(Exception):
     pass
 
