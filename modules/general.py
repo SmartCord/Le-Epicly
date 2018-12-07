@@ -6,6 +6,13 @@ class GeneralCommands:
         self.bot.remove_command('help')
         self.purchases = []
 
+    @commands.command()
+    async def help(self, ctx):
+        try:
+            await ctx.senx("Command in progress")
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
     @commands.command() # 30 points
     @commands.cooldown(2, 15, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
@@ -95,6 +102,9 @@ class GeneralCommands:
             db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-30}})
 
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
+            uploaded = len([x for x in db.memes.find({"uploaded_by":ctx.author.id})])
+            if uploaded == 10:
+                await giveAchievement(ctx.author, 2, extra="for uploading 10 memes")
 
         except Exception as e:
             await botError(self.bot, ctx, e)
@@ -141,7 +151,6 @@ class GeneralCommands:
             p = paginator.EmbedPages(ctx, embeds=embeds)
             await p.paginate()
 
-
         except Exception as e:
             await botError(self.bot, ctx, e)
 
@@ -183,6 +192,10 @@ class GeneralCommands:
                 pass
             else:
                 db.meme_collection.insert_one(data)
+
+            seens = len([x for x in db.meme_collection.find({"user_id":ctx.author.id})])
+            if seens == 500:
+                await giveAchievement(ctx.author, 3, extra="for using the meme command 500 times")
 
         except Exception as e:
             await botError(self.bot, ctx, e)
