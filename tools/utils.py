@@ -1,9 +1,9 @@
 import traceback, discord
 import datetime, random
 from tools.bot_tools import db
-from tools.bot_utils import giveAchievement
 from lxml.html import fromstring
 import requests
+import bot_utils
 
 default_prefix = "?"
 c = 0x0a91ff
@@ -141,12 +141,8 @@ async def botError(bot, message, e):
     em = discord.Embed(title="Oh well an unexpected error has occured", description=f"```{e}```\nThe error has now been sent to the bot developer. (Thank goodness)", color=r)
     em.set_thumbnail(url=gif['disappointed1'])
     footer(message, em)
-    # ** THE FOLLOWING PART IS JUST FOR OVERTIMED ** #
-    await giveAchievement(message.author, 4, extra="for finding an error, Thanks for helping out captain")
+    await bot_utils.giveAchievement(message.author, 4, extra="for finding an error. Thank you captain :)")
     await message.send(embed=em)
-
-    # ** THE FOLLOWING PART IS JUST FOR OVERTIMED ** #
-    await giveAchievement(message.author, 4, extra="for finding an error, Thanks for helping out captain")
 
     if message.author.id == 363880571614527488: # Your ID
         return
