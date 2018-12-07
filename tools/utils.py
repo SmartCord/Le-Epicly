@@ -3,7 +3,34 @@ import datetime, random
 from tools.bot_tools import db
 from lxml.html import fromstring
 import requests
-from tools import bot_utils
+
+# this function was cloned (Had to clone it cause i have no idea how to fix the issue i'm having, it has something to do with imports)
+
+async def giveAchievement(user, id, extra=None):
+    if extra is None:
+        extra = ""
+
+    # if not db.achievements.count({"id":id}):
+        # raise AchievementNotFound('Sorry mate but that achievement is not found. hehehe gaddem')
+#
+    # if not db.profiles.count({"user_id":user.id}):
+        # raise UserNotFound('How sad :(')
+
+    achievements = [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]
+
+    if id in achievements:
+        return
+
+    #if not id in achievements:
+    db.profiles.update_one({"user_id":user.id}, {'$push':{'achievements':id}})
+
+    for x in db.achievements.find({"id":id}):
+        reward = f"<:gold:514791023671509003> {x['coins']} Coins\n<:diagay:515536803407593486> {x['diamonds']} Diamonds"
+        e = discord.Embed(title=f"Wow New Achievement! Such cool", description=f":clap: Congratulations {user.name} you just obtained the achievement {x['name']} {extra}. :clap:\n\nOh and here are your rewards\n{reward}", color=color())
+        e.set_thumbnail(url=utils.gif['clap1'])
+        footer(user, e)
+        await user.send(embed=e)
+        db.profiles.update_one({"user_id":user.id}, {'$inc':{'coins':x['coins'], 'diamonds':x['diamonds']}})
 
 default_prefix = "?"
 c = 0x0a91ff
@@ -141,7 +168,7 @@ async def botError(bot, message, e):
     em = discord.Embed(title="Oh well an unexpected error has occured", description=f"```{e}```\nThe error has now been sent to the bot developer. (Thank goodness)", color=r)
     em.set_thumbnail(url=gif['disappointed1'])
     footer(message, em)
-    await bot_utils.giveAchievement(message.author, 4, extra="for finding an error. Thank you captain :)")
+    await giveAchievement(message.author, 4, extra="for finding an error. Thank you captain :)")
     await message.send(embed=em)
 
     if message.author.id == 363880571614527488: # Your ID
