@@ -28,7 +28,8 @@ async def pointless(ctx, required_points):
         return await ctx.send(embed=e), True
     return False
 
-async def giveAchievement(user, id):
+async def giveAchievement(user, id, for=""):
+
     if not db.achievements.count({"id":id}):
         raise AchievementNotFound('Sorry mate but that achievement is not found. hehehe gaddem')
 
@@ -36,7 +37,7 @@ async def giveAchievement(user, id):
         raise UserNotFound('How sad :(')
 
     if id in [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]:
-        return 
+        return
 
     #achievements = [x['achievements'] for x in db.profiles.find({"user_id":user.id})][0]
     #if not id in achievements:
@@ -44,7 +45,7 @@ async def giveAchievement(user, id):
 
     for x in db.achievements.find({"id":id}):
         reward = f"<:gold:514791023671509003> {x['coins']} Coins\n<:diagay:515536803407593486> {x['diamonds']} Diamonds"
-        e = discord.Embed(title=f"Wow New Achievement! Such cool", description=f":clap: Congratulations {user.name} you just obtained the achievement {x['name']}. :clap:\n\nOh and here are your rewards\n{reward}", color=color())
+        e = discord.Embed(title=f"Wow New Achievement! Such cool", description=f":clap: Congratulations {user.name} you just obtained the achievement {x['name']} {for}. :clap:\n\nOh and here are your rewards\n{reward}", color=color())
         e.set_thumbnail(url=utils.gif['clap1'])
         footer(user, e)
         await user.send(embed=e)
