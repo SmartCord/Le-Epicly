@@ -32,6 +32,12 @@ class OwnerGay:
         try:
             url = "https://api.ksoft.si/images/random-meme"
             token = config.ksoft
+            total = [x for x in db.memes.find({})]
+            message = await ctx.send(f"""
+Updating the database, Total memes = {total};
+
+None
+""")
 
             while True:
                 async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {token}"}) as cs:
@@ -48,10 +54,16 @@ class OwnerGay:
 
                 if not db.memes.count({"source":x['source']}):
                     db.memes.insert_one(data)
-                    print(x['source'])
+                    message = f"Uploaded contents of : {x['source']}"
                 else:
-                    print("Source already in DB : " + x['source'])
+                    message = "Source already in DB : " + x['source']
+                print(message)
+                total = [x for x in db.memes.find({})]
+                await message.edit(f"""
+Updating the database, Total memes = {total};
 
+{message}
+""")
                 await asyncio.sleep(1)
 
         except Exception as e:

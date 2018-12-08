@@ -14,10 +14,22 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def upload_dadjoke(self, ctx):
+        try:
+            if await pointless(ctx):
+                return
+
+            
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def dadjoke(self, ctx):
         try:
             if await pointless(ctx):
                 return
+
         except Exception as e:
             await botError(self.bot, ctx, e)
 
