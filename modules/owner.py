@@ -31,7 +31,7 @@ class OwnerGay:
     async def start_dadjoke_uploads(self, ctx):
         try:
             total = len([x for x in db.dadjokes.find({})])
-            message = await ctx.send(f"""
+            messagex = await ctx.send(f"""
 Updating the database, Total dadjokes = {total};
 
 None
@@ -57,7 +57,7 @@ None
                     message = "Source already in DB : " + source
                 print(message)
                 total = len([x for x in db.dadjokes.find({})])
-                await message.edit(f"""
+                await messagex.edit(f"""
 Updating the database, Total dadjokes = {total};
 
 {message}
