@@ -37,7 +37,7 @@ Updating the database, Total dadjokes = {total};
 None
 """)
 
-            for post in reddit.subreddit('dadjokes').hot(limit=600):
+            for post in reddit.subreddit('dadjokes').new(limit=200):
                 title = post.title
                 description = post.selftext
                 source = post.url
@@ -62,7 +62,21 @@ Updating the database, Total dadjokes = {total};
 
 {message}
 """)
-                await asyncio.sleep(1.5)
+                await asyncio.sleep(1)
+
+            await messagex.edit(content="Cleaning up...")
+            deleted_for_title = []
+            deleted_for_description = []
+            for x in db.dadjokes.find({}):
+                if len(x['title']) > 254:
+                    db.dadjokes.delete_one({"id":x['id']})
+                    deleted_for_title.append(x['id'])
+
+                if x['description'] == "" or x['description'] == " ":
+                    db.dadjokes.delete_one({"id":x['id']})
+                    deleted_for_description.append(x['id'])
+
+            await messagex.edit(content=f"Finished cleaning up.\nDeleted for long title : {len(deleted_for_title)}\nDeleted for no description : {len(deleted_for_description)}")
 
         except Exception as e:
             await botError(self.bot, ctx, e)
