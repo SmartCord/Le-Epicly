@@ -33,7 +33,7 @@ Total amount of profiles created since restart : {since_restart}
     @commands.command()
     async def messages_sent(self, ctx):
         try:
-            x = len(Counters.messages_sent)
+            x = Counters.messages_sent
             s = "s"
             if x < 2:
                 s = ""
