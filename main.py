@@ -40,6 +40,10 @@ class LeEpic(commands.AutoShardedBot):
         Counters.messages_sent += 1
         if message.author.bot:
             return
+
+        if message.content == "?server_prefix":
+            await message.channel.send(f"The prefix for this server is : {prefix(message)}")
+
         await self.process_commands(message)
 
 if __name__ == '__main__':

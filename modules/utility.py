@@ -16,6 +16,17 @@ class Utilities:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def dadjokes_count(self, ctx):
+        try:
+            amount = db.dadjokes.count({})
+            e = discord.Embed(title="Woah that's a lot of jokes", description=f"There are currently {amount} dad jokes in the database. You can help increase this number by uploading dad jokes using the `{prefix(ctx)}upload_dadjoke` command.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def profiles_count(self, ctx):
         try:
             amount = db.profiles.count({})

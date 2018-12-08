@@ -106,11 +106,41 @@ class GeneralCommands:
             db.dadjokes.insert_one(data)
             await success(ctx, f"Successfully uploaded your dadjoke\nTitle : {title}\nDescription : {description}")
 
+            niggas = db.dadjokes.count({"uploaded_by":ctx.author.id})
+            if niggas == 10:
+                await giveAchievement(ctx.author, 5, extra="for uploading 10 dad jokes")
+
 
         except Exception as e:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def dadjoke_collection(self, ctx):
+        try:
+            if not db.dadjoke_collection.count({"user_id":ctx.author.id}):
+                e = discord.Embed(title="Oops it's empty", description=f"Sorry but you haven't seen any dad jokes from this bot yet. Use the `{prefix(ctx)}dadjoke` command atleast once.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            embeds = []
+            for x in db.dadjoke_collection.find({"user_id":ctx.author.id}):
+                for y in db.dadjokes.find({"id":x['id']}):
+                    e = discord.Embed(title=y['title'], description=y['description'], color=color())
+                    if y['source'] != 'None':
+                        e.url = y['source']
+                    e.set_thumbnail(url=ctx.me.avatar_url)
+                    footer(ctx, e)
+                    embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def dadjoke(self, ctx, ranged: str = None):
         try:
             if await pointless(ctx):
@@ -163,6 +193,12 @@ class GeneralCommands:
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 e.set_footer(text=f"Uploaded by : {user}", icon_url=avatar)
                 embeds.append(e)
+                if not db.dadjoke_collection.count({"user_id":ctx.author.id, "id":joke['id']}):
+                    db.dadjoke_collection.insert_one({"user_id":ctx.author.id, "id":joke['id']})
+
+            seen = db.dadjoke_collection.count({"user_id":ctx.author.id})
+            if seen == 300:
+                await giveAchievement(ctx.author, 6, extra="for using the dad joke command 300 times")
 
             p = paginator.EmbedPages(ctx, embeds=embeds)
             await p.paginate()

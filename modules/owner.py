@@ -52,9 +52,9 @@ None
 
                 if not db.dadjokes.count({"source":source}):
                     db.dadjokes.insert_one(data)
-                    message = f"Uploaded contents of : {source}"
+                    message = f"Uploaded contents of : `{source}`"
                 else:
-                    message = "Source already in DB : " + source
+                    message = "Source already in DB : " + '`' + source + '`'
                 print(message)
                 total = len([x for x in db.dadjokes.find({})])
                 await messagex.edit(content=f"""
@@ -74,7 +74,7 @@ Updating the database, Total dadjokes = {total};
             url = "https://api.ksoft.si/images/random-meme"
             token = config.ksoft
             total = [x for x in db.memes.find({})]
-            message = await ctx.send(f"""
+            messagex = await ctx.send(f"""
 Updating the database, Total memes = {total};
 
 None
@@ -95,12 +95,12 @@ None
 
                 if not db.memes.count({"source":x['source']}):
                     db.memes.insert_one(data)
-                    message = f"Uploaded contents of : {x['source']}"
+                    message = f"Uploaded contents of : `{x['source']`"
                 else:
-                    message = "Source already in DB : " + x['source']
+                    message = "Source already in DB : " + '`' + x['source'] + '`'
                 print(message)
                 total = [x for x in db.memes.find({})]
-                await message.edit(f"""
+                await messagex.edit(f"""
 Updating the database, Total memes = {total};
 
 {message}
