@@ -57,7 +57,7 @@ None
                     message = "Source already in DB : " + source
                 print(message)
                 total = len([x for x in db.dadjokes.find({})])
-                await messagex.edit(f"""
+                await messagex.edit(content=f"""
 Updating the database, Total dadjokes = {total};
 
 {message}
