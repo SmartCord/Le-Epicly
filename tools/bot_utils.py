@@ -27,7 +27,7 @@ async def pointless(ctx):
     user_points = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
     left = user_points - req_points
     s = "s"
-    if required_points < 2:
+    if req_points < 2:
         s = ""
     if user_points == 0:
         but = "but you no longer have any points."
