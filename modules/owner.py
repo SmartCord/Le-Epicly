@@ -30,7 +30,7 @@ class OwnerGay:
     @commands.is_owner()
     async def start_dadjoke_uploads(self, ctx):
         try:
-            total = [x for x in db.dadjokes.find({})]
+            total = len([x for x in db.dadjokes.find({})])
             message = await ctx.send(f"""
 Updating the database, Total dadjokes = {total};
 
@@ -56,7 +56,7 @@ None
                 else:
                     message = "Source already in DB : " + source
                 print(message)
-                total = [x for x in db.dadjokes.find({})]
+                total = len([x for x in db.dadjokes.find({})])
                 await message.edit(f"""
 Updating the database, Total dadjokes = {total};
 
