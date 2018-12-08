@@ -43,7 +43,7 @@ None
                 source = post.url
                 data = {
                     'id':str(uuid.uuid4()),
-                    'title'title,
+                    'title':title,
                     'description':description,
                     'source':source,
                     'image':'None',
