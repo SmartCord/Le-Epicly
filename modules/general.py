@@ -32,7 +32,7 @@ class GeneralCommands:
                 if source is 'None':
                     source = None
 
-                e = discord.Embed(title=title, description=description, url=source, color=color())
+                e = discord.Embed(title=title, description=description, color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 embeds.append(e)
