@@ -28,6 +28,47 @@ class OwnerGay:
 
     @commands.command()
     @commands.is_owner()
+    async def start_dadjoke_uploads(self, ctx):
+        try:
+            total = [x for x in db.dadjokes.find({})]
+            message = await ctx.send(f"""
+Updating the database, Total dadjokes = {total};
+
+None
+""")
+
+            for post in reddit.subreddit('dadjokes').hot(limit=600):
+                title = post.title
+                description = post.selftext
+                source = post.url
+                data = {
+                    'id':str(uuid.uuid4()),
+                    'title'title,
+                    'description':description,
+                    'source':source,
+                    'image':'None',
+                    'uploaded_by':self.bot.user.id
+                }
+
+                if not db.dadjokes.count({"source":x['source']}):
+                    db.dadjokes.insert_one(data)
+                    message = f"Uploaded contents of : {x['source']}"
+                else:
+                    message = "Source already in DB : " + x['source']
+                print(message)
+                total = [x for x in db.dadjokes.find({})]
+                await message.edit(f"""
+Updating the database, Total dadjokes = {total};
+
+{message}
+""")
+                await asyncio.sleep(1.5)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
+    @commands.is_owner()
     async def start_meme_uploads(self, ctx):
         try:
             url = "https://api.ksoft.si/images/random-meme"
