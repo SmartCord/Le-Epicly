@@ -67,8 +67,9 @@ class GeneralCommands:
 
                 title = joke['title']
                 description = joke['description']
+                source = joke['source']
 
-                e = discord.Embed(title=title, description=description, color=color())
+                e = discord.Embed(title=title, description=description, url=source, color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 e.set_footer(text=f"Uploaded by : {user}", icon_url=avatar)
                 embeds.append(e)

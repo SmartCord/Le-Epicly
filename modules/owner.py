@@ -118,7 +118,8 @@ Updating the database, Total memes = {total};
             env = {
                 'bot':self.bot,
                 'ctx':ctx,
-                'db':db
+                'db':db,
+                'discord':discord
             }
             env.update(globals())
             body = cleanup_code(body)
