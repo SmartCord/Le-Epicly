@@ -9,7 +9,7 @@ class GeneralCommands:
     @commands.command()
     async def help(self, ctx):
         try:
-            await ctx.senx("Command in progress")
+            await ctx.send("Command in progress")
         except Exception as e:
             await botError(self.bot, ctx, e)
 

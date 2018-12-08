@@ -2,6 +2,7 @@ from imports import *
 
 class Counters:
     profiles_since_restart = 0
+    messages_sent = 0
 
 class AchievementNotFound(Exception):
     pass

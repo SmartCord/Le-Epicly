@@ -31,6 +31,7 @@ class LeEpic(commands.AutoShardedBot):
         print("Ok this is epic")
 
     async def on_message(self, message):
+        Counter.messages_sent += 1
         if message.author.bot:
             return
         await self.process_commands(message)

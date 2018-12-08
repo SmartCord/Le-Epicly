@@ -30,5 +30,19 @@ Total amount of profiles created since restart : {since_restart}
         except Exception as e:
             await botError(self.bot, ctx, e)
 
+    @commands.command()
+    async def messages_sent(self, ctx):
+        try:
+            x = len(Counters.messages_sent)
+            s = "s"
+            if x < 2:
+                s = ""
+            e = discord.Embed(title="Messages sent since restart", description=f"{x} message{s}.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
 def setup(bot):
     bot.add_cog(Utilities(bot))
