@@ -50,11 +50,11 @@ None
                     'uploaded_by':self.bot.user.id
                 }
 
-                if not db.dadjokes.count({"source":x['source']}):
+                if not db.dadjokes.count({"source":source}):
                     db.dadjokes.insert_one(data)
-                    message = f"Uploaded contents of : {x['source']}"
+                    message = f"Uploaded contents of : {source}"
                 else:
-                    message = "Source already in DB : " + x['source']
+                    message = "Source already in DB : " + source
                 print(message)
                 total = [x for x in db.dadjokes.find({})]
                 await message.edit(f"""
