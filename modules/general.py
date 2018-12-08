@@ -14,11 +14,54 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
-    async def upload_dadjoke(self, ctx):
+    async def upload_dadjoke(self, ctx, *, arguments: str = None):
         try:
             if await pointless(ctx):
                 return
 
+            if arguments is None:
+                return await usage(ctx, ['arguments'], ['title=Why was the broom late to work;; description=It overswept'], 'Available arguments are title and description. To seperate arguments use ";;" (See example above)')
+
+            arguments = arguments.split(";;")
+            args = {}
+            for item in arguments:
+                title_u = item.upper()
+                title_start = ("TITLE=", " TITLE=")
+                description_start = ("DESCRIPTION=", " DESCRIPTION=")
+
+                if item_u.startswith(title_start):
+                    title_cut = item[6:]
+                    if title_cut.startswith("="):
+                        title_cut = item[7:]
+                    args['title'] = title_cut
+
+                if item_u.startswith(description_start):
+                    description_cut = item[12:]
+                    if description_cut.startswith("="):
+                        description_cut = item[13:]
+                    args['description'] = description_cut
+
+            args_list = args.keys()
+            if not 'title' in args_list and not 'description' in args_list:
+                e = discord.Embed(title="Oops I can't find any valid arguments", description="The valid arguments are title and description.\n Here is an example of how the command works `title=Why was the broom late to work;; description=It overswept`. \nTo seperate use ';;' (Obviously without the quotation marks)", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            if not 'title' in args_list and 'description' in args_list:
+                e = discord.Embed(title="Uhh you missed one argument?", description="You missed the title argument...", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            if 'title' in args_list and not 'description' in args_list:
+                e = discord.Embed(title="Uhh you missed one argument?", description="You missed the description argument...", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            await ctx.send(args['title'])
+            await ctx.send(args['description'])
 
 
         except Exception as e:

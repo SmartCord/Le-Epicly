@@ -116,7 +116,7 @@ Updating the database, Total memes = {total};
         try:
             """ Code from R.Danny bot yeyey k, modified to fit my other bullshit """
             env = {
-                'bot':self.bot,
+                'self':self,
                 'ctx':ctx,
                 'db':db,
                 'discord':discord
