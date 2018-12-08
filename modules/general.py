@@ -25,24 +25,30 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
-    async def dadjoke(self, ctx, range: str = None):
+    async def dadjoke(self, ctx, ranged: str = None):
         try:
             if await pointless(ctx):
                 return
 
-            if range is None:
-                range = 1
+            if ranged is None:
+                ranged = 1
 
-            if range > 10 or range < 1:
+            if not isinstance(ranged, int):
+                e = discord.Embed(title="The range should be an integer", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            if ranged > 10 or ranged < 1:
                 e = discord.Embed(title="Woah hold on right there", description="The maximum range for this command is 10 and the minimum is 1.", color=color())
-                e.set_thumbnail(url=ctx.author.avatar_url)
+                e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
             jokes = []
             shits = [x for x in db.dadjokes.find({})]
 
-            for x in range(range):
+            for x in range(ranged):
                 joke = random.choice(shits)
                 if not joke in jokes:
                     jokes.append(joke)
