@@ -16,21 +16,21 @@ class GeneralCommands:
     @commands.command()
     async def my_dadjokes(self, ctx):
         try:
-            jokes = [x for x in db.dadjokes.find({})]
+            if not db.dadjokes.count({"uploaded_by":ctx.author.id}):
+                e = discord.Embed(title="Oh you don't have any yet :(", description=f"Sorry but you have not yet uploaded a dad joke. You can upload your first dad joke using the `{prefix(ctx)}upload_dadjoke` command.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
 
+            jokes = [x for x in db.dadjokes.find({"uploaded_by":ctx.author.id})]
             embeds = []
 
             for joke in jokes:
-                user = discord.utils.get(self.bot.get_all_members(), id=joke['uploaded_by'])
-                if user is None:
-                    user = "User cannot be found"
-                    avatar = ctx.me.avatar_url
-                else:
-                    avatar = user.avatar_url
-
                 title = joke['title']
                 description = joke['description']
                 source = joke['source']
+                if source is None:
+                    source = None
 
                 e = discord.Embed(title=title, description=description, url=source, color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
@@ -99,6 +99,7 @@ class GeneralCommands:
                 'id':id,
                 'title':title,
                 'description':description,
+                'source':'None',
                 'image':'None',
                 'uploaded_by':uploaded_by
             }
