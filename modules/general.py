@@ -14,6 +14,36 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def my_dadjokes(self, ctx):
+        try:
+            jokes = [x for x in db.dadjokes.find({})]
+
+            embeds = []
+
+            for joke in jokes:
+                user = discord.utils.get(self.bot.get_all_members(), id=joke['uploaded_by'])
+                if user is None:
+                    user = "User cannot be found"
+                    avatar = ctx.me.avatar_url
+                else:
+                    avatar = user.avatar_url
+
+                title = joke['title']
+                description = joke['description']
+                source = joke['source']
+
+                e = discord.Embed(title=title, description=description, url=source, color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def upload_dadjoke(self, ctx, *, arguments: str = None):
         try:
             if await pointless(ctx):
@@ -43,7 +73,7 @@ class GeneralCommands:
 
             args_list = args.keys()
             if not 'title' in args_list and not 'description' in args_list:
-                e = discord.Embed(title="Oops I can't find any valid arguments", description="The valid arguments are title and description.\n Here is an example of how the command works `title=Why was the broom late to work;; description=It overswept`. \nTo seperate use ';;' (Obviously without the quotation marks)", color=color())
+                e = discord.Embed(title="Oops I can't find any valid arguments", description="The valid arguments are title and description.\n Here is an example of how the command works `title=Why was the broom late to work;; description=It overswept`. \nTo seperate arguments use ';;' (Obviously without the quotation marks)", color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
                 return await ctx.send(embed=e)
@@ -60,8 +90,20 @@ class GeneralCommands:
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
-            await ctx.send(args['title'])
-            await ctx.send(args['description'])
+            title = args['title']
+            description = args['description']
+            uploaded_by = ctx.author.id
+            id = str(uuid.uuid4())
+
+            data = {
+                'id':id,
+                'title':title,
+                'description':description,
+                'image':'None',
+                'uploaded_by':uploaded_by
+            }
+            db.dadjokes.insert_one(data)
+            await success(ctx, f"Successfully uploaded your dadjoke\nTitle : {title}\nDescription : {description}")
 
 
         except Exception as e:
