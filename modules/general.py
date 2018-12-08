@@ -29,7 +29,7 @@ class GeneralCommands:
                 title = joke['title']
                 description = joke['description']
                 source = joke['source']
-                if source is None:
+                if source is 'None':
                     source = None
 
                 e = discord.Embed(title=title, description=description, url=source, color=color())
