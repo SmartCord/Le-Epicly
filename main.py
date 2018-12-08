@@ -27,6 +27,12 @@ class LeEpic(commands.AutoShardedBot):
         if isinstance(error, commands.errors.BadArgument):
             return await utils.error(ctx, "Bad Argument", str(error))
 
+    async def on_command(self, ctx):
+        if db.commands.count({"name":ctx.command.qualified_name}):
+            req_points = [x['points'] for x in db.commands.find({"name":ctx.command.qualified_name})][0]
+            if req_points != 0 and not await pointlessRaw(ctx):
+                db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-req_points}})
+
     async def on_ready(self):
         print("Ok this is epic")
 

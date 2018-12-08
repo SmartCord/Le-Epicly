@@ -13,11 +13,19 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
+    @commands.command()
+    async def dadjoke(self, ctx):
+        try:
+            if await pointless(ctx):
+                return
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
     @commands.command() # 30 points
     @commands.cooldown(2, 15, commands.BucketType.user)
     async def upload_meme(self, ctx, url: str = None):
         try:
-            if await pointless(ctx, 30):
+            if await pointless(ctx):
                 return
 
             if url is None:
@@ -99,8 +107,6 @@ class GeneralCommands:
             }
             db.memes.insert_one(data)
 
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{"points":-30}})
-
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
             uploaded = len([x for x in db.memes.find({"uploaded_by":ctx.author.id})])
             if uploaded == 10:
@@ -158,7 +164,7 @@ class GeneralCommands:
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def meme(self, ctx):
         try:
-            if await pointless(ctx, 4):
+            if await pointless(ctx):
                 return
 
             memes = [y for y in db.memes.find({})]
@@ -180,8 +186,6 @@ class GeneralCommands:
 
             e.set_footer(text=by, icon_url=icon_url)
             await ctx.send(embed=e)
-
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-4}})
 
             data = {
                 'id':x['id'],
@@ -484,7 +488,7 @@ class GeneralCommands:
     @commands.cooldown(2, 50, commands.BucketType.user)
     async def rep(self, ctx, *, user: discord.Member = None):
         try:
-            if await pointless(ctx, 4):
+            if await pointless(ctx):
                 return
 
             if user is None:
@@ -509,8 +513,6 @@ class GeneralCommands:
 
             db.profiles.update_one({"user_id":user.id}, {'$inc':{'reputation':1}})
             db.profiles.update_one({"user_id":user.id}, {'$push':{'reppers':ctx.author.id}})
-
-            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-4}})
 
 
             await success(ctx, f"Successfully gave {user.name} one reputation point.", user.avatar_url)

@@ -10,9 +10,22 @@ class AchievementNotFound(Exception):
 class UserNotFound(Exception):
     pass
 
-async def pointless(ctx, required_points):
+async def pointlessRaw(ctx):
+    req_points = 0
+    if db.commands.count({"name":ctx.command.qualified_name}):
+        req_points = [x['points'] for x in db.commands.find({"name":ctx.command.qualified_name})][0]
     user_points = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
-    left = user_points - required_points
+    left = user_points - req_points
+    if left < 1:
+        return True
+    return False
+
+async def pointless(ctx):
+    req_points = 0
+    if db.commands.count({"name":ctx.command.qualified_name}):
+        req_points = [x['points'] for x in db.commands.find({"name":ctx.command.qualified_name})][0]
+    user_points = [x['points'] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+    left = user_points - req_points
     s = "s"
     if required_points < 2:
         s = ""
@@ -23,7 +36,7 @@ async def pointless(ctx, required_points):
     else:
         but = "but you only have {} points left.".format(user_points)
     if left < 1:
-        e = discord.Embed(title="Not enough points", description=f"Sorry but this command requires {required_points} point{s} {but} Please visit the store to buy more points.", color=color())
+        e = discord.Embed(title="Not enough points", description=f"Sorry but this command requires {req_points} point{s} {but} Please visit the store to buy more points.", color=color())
         e.set_thumbnail(url=ctx.author.avatar_url)
         footer(ctx, e)
         return await ctx.send(embed=e), True
