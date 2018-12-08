@@ -73,7 +73,7 @@ Updating the database, Total dadjokes = {total};
         try:
             url = "https://api.ksoft.si/images/random-meme"
             token = config.ksoft
-            total = [x for x in db.memes.find({})]
+            total = len([x for x in db.memes.find({})])
             messagex = await ctx.send(f"""
 Updating the database, Total memes = {total};
 
@@ -95,12 +95,12 @@ None
 
                 if not db.memes.count({"source":x['source']}):
                     db.memes.insert_one(data)
-                    message = f"Uploaded contents of : `{x['source']`"
+                    message = f"Uploaded contents of : `{x['source']}`"
                 else:
                     message = "Source already in DB : " + '`' + x['source'] + '`'
                 print(message)
-                total = [x for x in db.memes.find({})]
-                await messagex.edit(f"""
+                total = len([x for x in db.memes.find({})])
+                await messagex.edit(content=f"""
 Updating the database, Total memes = {total};
 
 {message}
