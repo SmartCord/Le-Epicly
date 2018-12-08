@@ -19,16 +19,54 @@ class GeneralCommands:
             if await pointless(ctx):
                 return
 
-            
+
 
         except Exception as e:
             await botError(self.bot, ctx, e)
 
     @commands.command()
-    async def dadjoke(self, ctx):
+    async def dadjoke(self, ctx, range: str = None):
         try:
             if await pointless(ctx):
                 return
+
+            if range is None:
+                range = 1
+
+            if range > 10 or range < 1:
+                e = discord.Embed(title="Woah hold on right there", description="The maximum range for this command is 10 and the minimum is 1.", color=color())
+                e.set_thumbnail(url=ctx.author.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            jokes = []
+            shits = [x for x in db.dadjokes.find({})]
+
+            for x in range(range):
+                joke = random.choice(shits)
+                if not joke in jokes:
+                    jokes.append(joke)
+
+            embeds = []
+
+            for joke in jokes:
+                user = discord.utils.get(self.bot.get_all_members(), id=joke['uploaded_by'])
+                if user is None:
+                    user = "User cannot be found"
+                    avatar = ctx.me.avatar_url
+                else:
+                    avatar = user.avatar_url
+
+                title = joke['title']
+                description = joke['description']
+
+                e = discord.Embed(title=title, description=description, color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
 
         except Exception as e:
             await botError(self.bot, ctx, e)
