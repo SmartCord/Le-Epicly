@@ -33,7 +33,9 @@ class GeneralCommands:
             if ranged is None:
                 ranged = 1
 
-            if not isinstance(ranged, int):
+            try:
+                ranged = int(ranged)
+            except:
                 e = discord.Embed(title="The range should be an integer", color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
@@ -68,7 +70,7 @@ class GeneralCommands:
 
                 e = discord.Embed(title=title, description=description, color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
-                footer(ctx, e)
+                e.set_footer(text=f"Uploaded by : {user}", icon_url=avatar)
                 embeds.append(e)
 
             p = paginator.EmbedPages(ctx, embeds=embeds)
