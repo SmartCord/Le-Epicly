@@ -25,7 +25,7 @@ class GeneralCommands:
             arguments = arguments.split(";;")
             args = {}
             for item in arguments:
-                title_u = item.upper()
+                item_u = item.upper()
                 title_start = ("TITLE=", " TITLE=")
                 description_start = ("DESCRIPTION=", " DESCRIPTION=")
 
