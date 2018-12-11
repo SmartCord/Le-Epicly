@@ -46,6 +46,29 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def programmer_humor_collection(self, ctx):
+        try:
+            if not db.programmer_humor_collection.count({"user_id":ctx.author.id}):
+                e = discord.Embed(title="You don't have any of those things yet", description=f"Please use the `{prefix(ctx)}programmer_humor` command atleast once.", color=color())
+                footer(ctx, e)
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                return await ctx.send(embed=e)
+
+            embeds = []
+            for x in db.programmer_humor_collection.find({"user_id":ctx.author.id}):
+                for y in db.programmer_humor.find({"id":x['id']}):
+                    e = discord.Embed(title=y['title'], url=y['source'], color=color())
+                    e.set_image(url=y['image'])
+                    footer(ctx, e)
+                    embeds.append(e)
+
+            p = paginator.EmbedPages(ctx, embeds=embeds)
+            await p.paginate()
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def my_dadjokes(self, ctx):
         try:
             if not db.dadjokes.count({"uploaded_by":ctx.author.id}):
