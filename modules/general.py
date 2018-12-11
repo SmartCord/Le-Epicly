@@ -9,7 +9,7 @@ class GeneralCommands:
     @commands.command()
     async def help(self, ctx):
         try:
-            await ctx.send("Command in progress")
+            await ctx.send("To get a list of commands and some other stuff, please read the documentation\nhttps://cooldiscordbot.gitbook.io/overtimed")
         except Exception as e:
             await botError(self.bot, ctx, e)
 
