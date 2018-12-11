@@ -28,7 +28,7 @@ class OwnerGay:
 
     @commands.command()
     @commands.is_owner()
-    async def start_programmer_humor_uploads(self, ctx):
+    async def start_programmer_humor_uploads(self, ctx, rangexddd: int):
         try:
             total = len([x for x in db.programmer_humor.find({})])
             messagex = await ctx.send(f"""
@@ -37,7 +37,7 @@ Updating the database, Total programmer_humor = {total};
 None
 """)
 
-            for post in reddit.subreddit('ProgrammerHumor').hot(limit=1000):
+            for post in reddit.subreddit('ProgrammerHumor').new(limit=rangexddd):
                 title = post.title
                 image = post.url
                 source = "https://www.reddit.com" + post.permalink
@@ -85,7 +85,7 @@ None
 
     @commands.command()
     @commands.is_owner()
-    async def start_dadjoke_uploads(self, ctx):
+    async def start_dadjoke_uploads(self, ctx, rangelol: int):
         try:
             total = len([x for x in db.dadjokes.find({})])
             messagex = await ctx.send(f"""
@@ -94,7 +94,7 @@ Updating the database, Total dadjokes = {total};
 None
 """)
 
-            for post in reddit.subreddit('dadjokes').new(limit=200):
+            for post in reddit.subreddit('dadjokes').new(limit=rangelol):
                 title = post.title
                 description = post.selftext
                 source = post.url
@@ -140,7 +140,7 @@ Updating the database, Total dadjokes = {total};
 
     @commands.command()
     @commands.is_owner()
-    async def start_meme_uploads(self, ctx):
+    async def start_meme_uploads(self, ctx, rangexxx: int):
         try:
             url = "https://api.ksoft.si/images/random-meme"
             token = config.ksoft
@@ -151,7 +151,7 @@ Updating the database, Total memes = {total};
 None
 """)
 
-            while True:
+            for eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee in range(rangexxx):
                 async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {token}"}) as cs:
                     async with cs.get(url) as rep:
                         x = await rep.json()
