@@ -39,7 +39,7 @@ class GeneralCommands:
             e.set_footer(text="Uploaded by : {}".format(uploaded_by), icon_url=avatar)
             await ctx.send(embed=e)
 
-            if not db.programmer_humor_collection.count({"id":id}):
+            if not db.programmer_humor_collection.count({"id":id, "user_id":ctx.author.id}):
                 db.programmer_humor_collection.insert_one({"id":id, "user_id":ctx.author.id})
 
         except Exception as e:
