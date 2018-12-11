@@ -28,6 +28,63 @@ class OwnerGay:
 
     @commands.command()
     @commands.is_owner()
+    async def start_programmer_humor_uploads(self, ctx):
+        try:
+            total = len([x for x in db.programmer_humor.find({})])
+            messagex = await ctx.send(f"""
+Updating the database, Total programmer_humor = {total};
+
+None
+""")
+
+            for post in reddit.subreddit('ProgrammerHumor').hot(limit=1000):
+                title = post.title
+                image = post.url
+                source = "https://www.reddit.com" + post.permalink
+                if not post['stickied']:
+
+                    data = {
+                        'id':str(uuid.uuid4()),
+                        'title':title,
+                        'description':'None',
+                        'source':source,
+                        'image':image,
+                        'uploaded_by':self.bot.user.id
+                    }
+
+                    if not db.programmer_humor.count({"source":source}):
+                        db.programmer_humor.insert_one(data)
+                        message = f"Uploaded contents of : `{source}`"
+                    else:
+                        message = "Source already in DB : " + '`' + source + '`'
+                    print(message)
+                    total = len([x for x in db.programmer_humor.find({})])
+                    await messagex.edit(content=f"""
+    Updating the database, Total programmer_humor = {total};
+
+    {message}
+    """)
+                    await asyncio.sleep(1)
+
+            await messagex.edit(content="Cleaning up...")
+            deleted_for_title = []
+            deleted_for_description = []
+            for x in db.programmer_humor.find({}):
+                if len(x['title']) > 254:
+                    db.programmer_humor.delete_one({"id":x['id']})
+                    deleted_for_title.append(x['id'])
+
+                if x['description'] == "" or x['description'] == " ":
+                    db.programmer_humor.delete_one({"id":x['id']})
+                    deleted_for_description.append(x['id'])
+
+            await messagex.edit(content=f"Finished cleaning up.\nDeleted for long title : {len(deleted_for_title)}\nDeleted for no description : {len(deleted_for_description)}")
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
+    @commands.is_owner()
     async def start_dadjoke_uploads(self, ctx):
         try:
             total = len([x for x in db.dadjokes.find({})])

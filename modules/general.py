@@ -14,6 +14,38 @@ class GeneralCommands:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    async def programmer_humor(self, ctx):
+        try:
+            if await pointless(ctx):
+                return
+
+            humors = [x for x in db.programmer_humor.find({})]
+            humor = random.choice(humor)
+            image = humor['url']
+            title = humor['title']
+            source = humor['source']
+            uploaded_by = humor['uploaded_by']
+            id = humor['id']
+
+            uploaded_by = discord.utils.get(self.bot.get_all_members(), id=uploaded_by)
+            if uploaded_by is None:
+                uploaded_by = "User cannot be found"
+                avatar = self.bot.user.avatar_url
+            else:
+                avatar = uploaded_by.avatar_url
+
+            e = discord.Embed(title=title, url=source, color=color())
+            e.set_image(url=image)
+            e.set_footer(text="Uploaded by : {}".format(uploaded_by), icon_url=avatar)
+            await ctx.send(embed=e)
+
+            if not db.programmer_humor_collection.count({"id":id}):
+                db.programmer_humor_collection.insert_one({"id":id, "user_id":ctx.author.id})
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def my_dadjokes(self, ctx):
         try:
             if not db.dadjokes.count({"uploaded_by":ctx.author.id}):
