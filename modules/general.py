@@ -21,7 +21,7 @@ class GeneralCommands:
 
             humors = [x for x in db.programmer_humor.find({})]
             humor = random.choice(humors)
-            image = humor['url']
+            image = humor['image']
             title = humor['title']
             source = humor['source']
             uploaded_by = humor['uploaded_by']
