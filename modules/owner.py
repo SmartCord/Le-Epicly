@@ -41,7 +41,7 @@ None
                 title = post.title
                 image = post.url
                 source = "https://www.reddit.com" + post.permalink
-                if not post['stickied']:
+                if not post.stickied:
 
                     data = {
                         'id':str(uuid.uuid4()),
