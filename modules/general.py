@@ -9,7 +9,54 @@ class GeneralCommands:
     @commands.command()
     async def help(self, ctx):
         try:
-            await ctx.send("To get a list of commands and some other stuff, please read the documentation\nhttps://cooldiscordbot.gitbook.io/overtimed")
+            e = discord.Embed(title="Welcome to the one and only amazing spectacular unbelievably interactive help command.", color=color())
+            e.description = """
+In this documentation you will learn how to use the discord bot correctly.
+
+Some commands (Specifically fun commands) requires points. If you don't have enough points
+the bot will tell you that (Obviously). To purchase points you have to look at the store (Stare at it's soul) and then once
+you find the item/points pack you want to purchase simply use the purchase command.
+
+Each command has a category and to access a category press one of the reactions below this embed.
+
+💠 - General Commands 
+⚙️ - Utility Commands
+😂 - Fun Commands 
+
+"""
+
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            menu = await ctx.send(embed=e)
+            reactions = ['💠', '⚙️', '😂 ']
+            for reaction in reactions:
+                await menu.add_reaction(reaction)
+            
+            def check(reaction, user):
+                return user == ctx.author
+
+            async def general():
+                embed = discord.Embed(title="General Commands", color=color())
+                embed.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, embed)
+                
+                return embed
+
+            doFunction = {
+                '💠':general,
+                '⚙️':utility,
+                '😂':fun
+            }
+            
+            while True:
+                reaction, message = await self.bot.wait_for('reaction_add', check=check)
+                try:
+                    embed = await doFunction[str(reaction.emoji)]()
+                    await menu.edit(embed=embed)
+                    await menu.remove_reaction(str(reaction.emoji), self.bot.user)
+                except KeyError:
+                    pass
+
         except Exception as e:
             await botError(self.bot, ctx, e)
 

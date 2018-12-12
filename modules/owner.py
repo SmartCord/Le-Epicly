@@ -27,6 +27,50 @@ class OwnerGay:
         self._last_result = None
 
     @commands.command()
+    async def new_command(self, ctx, category, name, points):
+        try:
+            data = {
+                'category':category,
+                'command':name,
+                'points':points
+            }
+
+            db.menu.insert_one(data)
+            await ctx.send('done')
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
+    async def delete_item(self, ctx, command: str, _id: str, *, reason: str):
+        try:
+            points_return = getPoints(command)
+            data_shit = {
+                'dadjoke':'dadjokes',
+                'meme':'memes'
+            }
+            collection_name = data_shit[command]
+            if not db[collection_name].count({"id":_id}):
+                return await ctx.send("ID Not found")
+            
+            for x in db[collection_name].find({"id":_id}):
+                data = x
+            db[collection_name].delete_one({"id":_id})
+            await ctx.send("Deleted yey")
+
+            e = discord.Embed(title="Your post was deleted", description=f"Your post : {data['title']} was deleted.\n\nReason : {reason}\nPoints given back : {points}", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            user = discord.utils.get(self.bot.get_all_members(), id=data['uploaded_by'])
+            if user is None:
+                return 
+            
+            
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     @commands.is_owner()
     async def start_programmer_humor_uploads(self, ctx, rangexddd: int):
         try:

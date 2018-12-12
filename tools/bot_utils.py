@@ -10,6 +10,15 @@ class AchievementNotFound(Exception):
 class UserNotFound(Exception):
     pass
 
+class CommandNotFound(Exception):
+    pass
+
+async def getPoints(command):
+    if db.commands.count_documents({"name":command}):
+        return [x['points'] for x in db.commands.find({"name":command})][0]
+    else:
+        raise CommandNotFound("The command {} is not found.".format(command))
+
 async def pointlessRaw(ctx):
     req_points = 0
     if db.commands.count({"name":ctx.command.qualified_name}):

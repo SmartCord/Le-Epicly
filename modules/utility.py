@@ -14,6 +14,7 @@ class Utilities:
             await ctx.send(embed=e)
         except Exception as e:
             await botError(self.bot, ctx, e)
+        
 
     @commands.command()
     async def memes_count(self, ctx):
