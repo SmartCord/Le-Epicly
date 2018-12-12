@@ -35,21 +35,21 @@ Each command has a category and to access a category press one of the reactions 
             def check(reaction, user):
                 return user == ctx.author
 
-            async def general():
-                embed = discord.Embed(title="General Commands", color=color())
+            async def commandGet(category):
+                embed = discord.Embed(title=f"{category[0].upper() + category[1:]} Commands", color=color())
                 embed.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, embed)
                 server_prefix = prefix(ctx)
                 e.description = ""
-                for x in db.menu.find({"category":"general"}):
+                for x in db.menu.find({"category":category}):
                     e.description += f"{server_prefix}{x['name']}\n:small_orange_diamond: Points : {x['points']}\n\n"
 
                 return embed
 
             doFunction = {
-                '💠':general,
-                '🔧':utility,
-                '😂':fun
+                '💠':commandGet('general'),
+                '🔧':commandGet('utility'),
+                '😂':commandGet('fun')
             }
             
             while True:
