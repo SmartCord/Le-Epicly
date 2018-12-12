@@ -40,9 +40,9 @@ Each command has a category and to access a category press one of the reactions 
                 embed.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, embed)
                 server_prefix = prefix(ctx)
-                e.description = ""
+                embed.description = ""
                 for x in db.menu.find({"category":category}):
-                    e.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n\n"
+                    embed.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n\n"
 
                 return embed
 
@@ -57,7 +57,6 @@ Each command has a category and to access a category press one of the reactions 
                 try:
                     embed = await commandGet(doFunction[str(reaction.emoji)])
                     await menu.edit(embed=embed)
-                    await menu.remove_reaction(str(reaction.emoji), self.bot.user)
                 except KeyError:
                     pass
 
