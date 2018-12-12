@@ -9,6 +9,10 @@ class GeneralCommands:
     @commands.command(aliases=['gay_rate', 'gayrate'])
     async def gay(self, ctx, *, user: discord.Member = None):
         try:
+            
+            if await pointless(ctx):
+                return 
+
             if user is None:
                 user = ctx.author
 

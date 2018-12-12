@@ -31,6 +31,12 @@ class OwnerGay:
         try:
             if points is None:
                 points = 0
+            else:
+                data = {
+                    'name':name,
+                    'points':points
+                }
+                db.commands.insert_one(data)
             data = {
                 'category':category,
                 'command':name,
