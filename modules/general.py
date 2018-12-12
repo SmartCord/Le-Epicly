@@ -279,6 +279,7 @@ class GeneralCommands:
             if not url.endswith('/'):
                 url += "/"
 
+
             # proxies = utils.get_proxies()
             #chosen = random.choice(proxies)
             # connection = False
@@ -303,6 +304,7 @@ class GeneralCommands:
             source = url
             uploaded_by = ctx.author.id
             id = str(uuid.uuid4())
+            channel_to_send = self.bot.get_channel(522261757817913354)
             try:
                 title = soup.find('span', attrs={'class':'y8HYJ-y_lTUHkQIc1mdCq'}).text
                 image = soup.find('div', attrs={'class':'_3Oa0THmZ3f5iZXAQ0hBJ0k'})
@@ -349,6 +351,7 @@ class GeneralCommands:
 
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
             uploaded = len([x for x in db.memes.find({"uploaded_by":ctx.author.id})])
+            await channel_to_send.send(f"Uploaded by : {discord.utils.get(self.bot.get_all_members, id=data['uploaded_by'])} ({data['uploaded_by']})\nUrl : {data['image']}\nSource : {data['source']}\nID : {data['id']}'")
             if uploaded == 10:
                 await giveAchievement(ctx.author, 2, extra="for uploading 10 memes")
 
