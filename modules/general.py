@@ -161,6 +161,13 @@ class GeneralCommands:
             db.dadjokes.insert_one(data)
             await success(ctx, f"Successfully uploaded your dadjoke\nTitle : {title}\nDescription : {description}")
 
+            channel_to_send = self.bot.get_channel(522268395807440917)
+            author_sender = discord.utils.get(self.bot.get_all_members(), id=data['uploaded_by'])
+            e = discord.Embed(title=data['title'], description=data['description'], color=color())
+            e.set_thumbnail(url=author_sender.avatar_url)
+            e.set_footer(text=data['id'])
+            await channel_to_send.send(embed=e)
+
             niggas = db.dadjokes.count({"uploaded_by":ctx.author.id})
             if niggas == 10:
                 await giveAchievement(ctx.author, 5, extra="for uploading 10 dad jokes")
@@ -351,7 +358,12 @@ class GeneralCommands:
 
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
             uploaded = len([x for x in db.memes.find({"uploaded_by":ctx.author.id})])
-            await channel_to_send.send(f"Uploaded by : {discord.utils.get(self.bot.get_all_members(), id=data['uploaded_by'])} ({data['uploaded_by']})\nUrl : {data['image']}\nSource : {data['source']}\nID : {data['id']}'")
+            author = discord.utils.get(self.bot.get_all_members(), id=data['uploaded_by'])
+            e = discord.Embed(title=data['title'], url=data['source'], color=color())
+            e.set_thumbnail(url=author.avatar_url)
+            e.set_image(url=data['image'])
+            e.set_footer(text=data['id'])
+            await channel_to_send.send(embed=e)
             if uploaded == 10:
                 await giveAchievement(ctx.author, 2, extra="for uploading 10 memes")
 
