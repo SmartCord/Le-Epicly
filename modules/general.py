@@ -47,15 +47,15 @@ Each command has a category and to access a category press one of the reactions 
                 return embed
 
             doFunction = {
-                '💠':commandGet('general'),
-                '🔧':commandGet('utility'),
-                '😂':commandGet('fun')
+                '💠':'general',
+                '🔧':'utility',
+                '😂':'fun'
             }
             
             while True:
                 reaction, message = await self.bot.wait_for('reaction_add', check=check)
                 try:
-                    embed = await doFunction[str(reaction.emoji)]()
+                    embed = await commandGet(doFunction[str(reaction.emoji)])
                     await menu.edit(embed=embed)
                     await menu.remove_reaction(str(reaction.emoji), self.bot.user)
                 except KeyError:
