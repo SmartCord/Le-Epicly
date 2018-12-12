@@ -58,6 +58,8 @@ class OwnerGay:
             db[collection_name].delete_one({"id":_id})
             await ctx.send("Deleted yey")
 
+            poins = getPoints(collection_name)
+
             e = discord.Embed(title="Your post was deleted", description=f"Your post : {data['title']} was deleted.\n\nReason : {reason}\nPoints given back : {points}", color=color())
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
@@ -65,6 +67,8 @@ class OwnerGay:
             if user is None:
                 return 
             
+            await user.send(embed=e)
+            db.profiles.update_one({"user_id":user.id}, {'$inc':{'points':points}})
             
 
         except Exception as e:
