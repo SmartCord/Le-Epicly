@@ -20,7 +20,7 @@ you find the item/points pack you want to purchase simply use the purchase comma
 Each command has a category and to access a category press one of the reactions below this embed.
 
 💠 - General Commands 
-⚙️ - Utility Commands
+🔧 - Utility Commands
 😂 - Fun Commands 
 
 """
@@ -28,7 +28,7 @@ Each command has a category and to access a category press one of the reactions 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
             menu = await ctx.send(embed=e)
-            reactions = ['💠', '⚙️', '😂 ']
+            reactions = ['💠', '🔧', '😂 ']
             for reaction in reactions:
                 await menu.add_reaction(reaction)
             
@@ -39,12 +39,16 @@ Each command has a category and to access a category press one of the reactions 
                 embed = discord.Embed(title="General Commands", color=color())
                 embed.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, embed)
-                
+                server_prefix = prefix(ctx)
+                e.description = ""
+                for x in db.menu.find({"category":"general"}):
+                    e.description += f"{server_prefix}{x['name']}\n:small_orange_diamond: Points : {x['points']}\n\n"
+
                 return embed
 
             doFunction = {
                 '💠':general,
-                '⚙️':utility,
+                '🔧':utility,
                 '😂':fun
             }
             
