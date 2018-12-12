@@ -27,8 +27,10 @@ class OwnerGay:
         self._last_result = None
 
     @commands.command()
-    async def new_command(self, ctx, category, name, points):
+    async def new_command(self, ctx, category, name, points = None):
         try:
+            if points is None:
+                points = 0
             data = {
                 'category':category,
                 'command':name,
