@@ -351,7 +351,7 @@ class GeneralCommands:
 
             await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
             uploaded = len([x for x in db.memes.find({"uploaded_by":ctx.author.id})])
-            await channel_to_send.send(f"Uploaded by : {discord.utils.get(self.bot.get_all_members, id=data['uploaded_by'])} ({data['uploaded_by']})\nUrl : {data['image']}\nSource : {data['source']}\nID : {data['id']}'")
+            await channel_to_send.send(f"Uploaded by : {discord.utils.get(self.bot.get_all_members(), id=data['uploaded_by'])} ({data['uploaded_by']})\nUrl : {data['image']}\nSource : {data['source']}\nID : {data['id']}'")
             if uploaded == 10:
                 await giveAchievement(ctx.author, 2, extra="for uploading 10 memes")
 
