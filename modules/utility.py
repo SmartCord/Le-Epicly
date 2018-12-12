@@ -4,6 +4,17 @@ class Utilities:
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(aliases=['programmer_humour_count'])
+    async def programmer_humor_count(self, ctx):
+        try:
+            amount = db.programmer_humor.count_documents({})
+            e = discord.Embed(title="Total amount of programmer humors", description=f"There are currently {amount} programmer humors in the database.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
     @commands.command()
     async def memes_count(self, ctx):
         try:
