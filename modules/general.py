@@ -7,6 +7,21 @@ class GeneralCommands:
         self.purchases = []
 
     @commands.command()
+    async def gay(self, ctx, *, user: discord.Member = None):
+        try:
+            if user is None:
+                user = ctx.author 
+            
+            percentage = random.randint(1, 100)
+            random.seed(user.id)
+            e = discord.Embed(title=f"Here is the gay rate of {user.name}", description=f"{percentage}% Gay", color=color())
+            e.set_thumbnail(url=user.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def help(self, ctx):
         try:
             e = discord.Embed(title="Welcome to the one and only amazing spectacular unbelievably interactive help command.", color=color())
@@ -22,14 +37,15 @@ Each command has a category and to access a category press one of the reactions 
 ❓ - This menu
 💠 - General Commands 
 🔧 - Utility Commands
-😂 - Fun Commands 
+😂 - Fun Commands
+⚙ - User Settings 
 
 """
 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
             menu = await ctx.send(embed=e)
-            reactions = ['❓', '💠', '🔧', '😂']
+            reactions = ['❓', '💠', '🔧', '😂', '⚙']
             for reaction in reactions:
                 await menu.add_reaction(reaction)
             
@@ -37,7 +53,11 @@ Each command has a category and to access a category press one of the reactions 
                 return user == ctx.author
 
             async def commandGet(category):
-                embed = discord.Embed(title=f"{category[0].upper() + category[1:]} Commands", color=color())
+                if category == "user_settings":
+                    namex = "User Settings"
+                else:
+                    namex = category[0].upper() + category[1:]
+                embed = discord.Embed(title=f"{namex} Commands", color=color())
                 embed.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, embed)
                 server_prefix = prefix(ctx)
@@ -51,7 +71,8 @@ Each command has a category and to access a category press one of the reactions 
                 '❓':'menu',
                 '💠':'general',
                 '🔧':'utility',
-                '😂':'fun'
+                '😂':'fun',
+                '⚙':'user_settings'
             }
             
             while True:
@@ -559,7 +580,7 @@ Each command has a category and to access a category press one of the reactions 
         # except Exception as e:
             # await botError(self.bot, ctx, e)
 
-    @commands.command()
+    @commands.command(aliases=['shop'])
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def store(self, ctx):
         try:
