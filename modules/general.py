@@ -62,6 +62,10 @@ Each command has a category and to access a category press one of the reactions 
                     try:
                         embed = await commandGet(doFunction[str(reaction.emoji)])
                         await menu.edit(embed=embed)
+                        try:
+                            await menu.remove_reaction(str(reaction.emoji), ctx.author)
+                        except:
+                            pass
                     except KeyError:
                         pass
 
