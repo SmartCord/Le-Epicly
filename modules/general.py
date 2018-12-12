@@ -13,7 +13,7 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
-    @commands.command()
+    @commands.command(aliases=['programmer_humour'])
     async def programmer_humor(self, ctx):
         try:
             if await pointless(ctx):
@@ -45,7 +45,7 @@ class GeneralCommands:
         except Exception as e:
             await botError(self.bot, ctx, e)
 
-    @commands.command()
+    @commands.command(aliases=['programmer_humour_collection'])
     async def programmer_humor_collection(self, ctx):
         try:
             if not db.programmer_humor_collection.count({"user_id":ctx.author.id}):
