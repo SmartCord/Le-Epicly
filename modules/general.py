@@ -19,6 +19,7 @@ you find the item/points pack you want to purchase simply use the purchase comma
 
 Each command has a category and to access a category press one of the reactions below this embed.
 
+❓ - This menu
 💠 - General Commands 
 🔧 - Utility Commands
 😂 - Fun Commands 
@@ -28,7 +29,7 @@ Each command has a category and to access a category press one of the reactions 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
             menu = await ctx.send(embed=e)
-            reactions = ['💠', '🔧', '😂']
+            reactions = ['❓', 💠', '🔧', '😂']
             for reaction in reactions:
                 await menu.add_reaction(reaction)
             
@@ -42,11 +43,12 @@ Each command has a category and to access a category press one of the reactions 
                 server_prefix = prefix(ctx)
                 embed.description = ""
                 for x in db.menu.find({"category":category}):
-                    embed.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n\n"
+                    embed.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n"
 
                 return embed
 
             doFunction = {
+                '❓':'menu',
                 '💠':'general',
                 '🔧':'utility',
                 '😂':'fun'
@@ -54,11 +56,14 @@ Each command has a category and to access a category press one of the reactions 
             
             while True:
                 reaction, message = await self.bot.wait_for('reaction_add', check=check)
-                try:
-                    embed = await commandGet(doFunction[str(reaction.emoji)])
-                    await menu.edit(embed=embed)
-                except KeyError:
-                    pass
+                if str(reaction.emoji) == "❓":
+                    await menu.edit(embed=e)
+                else:
+                    try:
+                        embed = await commandGet(doFunction[str(reaction.emoji)])
+                        await menu.edit(embed=embed)
+                    except KeyError:
+                        pass
 
         except Exception as e:
             await botError(self.bot, ctx, e)
