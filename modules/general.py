@@ -29,7 +29,7 @@ Each command has a category and to access a category press one of the reactions 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
             menu = await ctx.send(embed=e)
-            reactions = ['❓', 💠', '🔧', '😂']
+            reactions = ['❓', '💠', '🔧', '😂']
             for reaction in reactions:
                 await menu.add_reaction(reaction)
             
