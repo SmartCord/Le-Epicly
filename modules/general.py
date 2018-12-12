@@ -42,7 +42,7 @@ Each command has a category and to access a category press one of the reactions 
                 server_prefix = prefix(ctx)
                 e.description = ""
                 for x in db.menu.find({"category":category}):
-                    e.description += f"{server_prefix}{x['name']}\n:small_orange_diamond: Points : {x['points']}\n\n"
+                    e.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n\n"
 
                 return embed
 
