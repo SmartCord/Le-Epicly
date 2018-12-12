@@ -10,10 +10,10 @@ class GeneralCommands:
     async def gay(self, ctx, *, user: discord.Member = None):
         try:
             if user is None:
-                user = ctx.author 
-            
-            percentage = random.randint(1, 100)
+                user = ctx.author
+                 
             random.seed(user.id)
+            percentage = random.randint(1, 100)
             e = discord.Embed(title=f"Here is the gay rate of {user.name}", description=f"{percentage}% Gay", color=color())
             e.set_thumbnail(url=user.avatar_url)
             footer(ctx, e)
