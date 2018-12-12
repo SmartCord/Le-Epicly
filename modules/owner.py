@@ -57,7 +57,7 @@ class OwnerGay:
             db[collection_name].delete_one({"id":_id})
             await ctx.send("Deleted yey")
 
-            points = getPoints(collection_name)
+            points = getPoints(command)
 
             e = discord.Embed(title="Your post was deleted", description=f"Your post : {data['title']} was deleted.\n\nReason : {reason}\nPoints given back : {points}", color=color())
             e.set_thumbnail(url=ctx.me.avatar_url)
