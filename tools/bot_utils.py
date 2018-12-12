@@ -13,7 +13,7 @@ class UserNotFound(Exception):
 class CommandNotFound(Exception):
     pass
 
-async def getPoints(command):
+def getPoints(command):
     if db.commands.count_documents({"name":command}):
         return [x['points'] for x in db.commands.find({"name":command})][0]
     else:

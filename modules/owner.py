@@ -44,7 +44,6 @@ class OwnerGay:
     @commands.command()
     async def delete_item(self, ctx, command: str, _id: str, *, reason: str):
         try:
-            points_return = getPoints(command)
             data_shit = {
                 'dadjoke':'dadjokes',
                 'meme':'memes'
@@ -58,7 +57,7 @@ class OwnerGay:
             db[collection_name].delete_one({"id":_id})
             await ctx.send("Deleted yey")
 
-            poins = getPoints(collection_name)
+            points = getPoints(collection_name)
 
             e = discord.Embed(title="Your post was deleted", description=f"Your post : {data['title']} was deleted.\n\nReason : {reason}\nPoints given back : {points}", color=color())
             e.set_thumbnail(url=ctx.me.avatar_url)
