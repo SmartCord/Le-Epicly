@@ -6,15 +6,18 @@ class GeneralCommands:
         self.bot.remove_command('help')
         self.purchases = []
 
-    @commands.command()
+    @commands.command(aliases=['gay_rate', 'gayrate'])
     async def gay(self, ctx, *, user: discord.Member = None):
         try:
             if user is None:
                 user = ctx.author
-                 
+
             random.seed(user.id)
             percentage = random.randint(1, 100)
-            e = discord.Embed(title=f"Here is the gay rate of {user.name}", description=f"{percentage}% Gay", color=color())
+            title = f"Here is {user.name}'s gay rate"
+            if user is ctx.author:
+                title = "Here is your gay rate"
+            e = discord.Embed(title=title, description=f"{percentage}% Gay", color=color())
             e.set_thumbnail(url=user.avatar_url)
             footer(ctx, e)
             await ctx.send(embed=e)
