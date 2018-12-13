@@ -6,11 +6,11 @@ class FunCommands:
 
     @commands.command()
     async def penis(self, ctx, *, user: discord.Member = None):
-        
+
         if await pointless(ctx):
             return 
 
-        if user is None:
+        if user is Nonce:
             user = ctx.author
         
         random.seed(user.id)
