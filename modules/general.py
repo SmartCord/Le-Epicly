@@ -52,7 +52,7 @@ Each command has a category and to access a category press one of the reactions 
                     if x['points'] < 2:
                         s = ""
                     #embed.description += f"`{server_prefix}{x['command']} ({x['points']} Point{s})`, "
-                    embed.description += f"{server_prefix}{x['command']} - {x['points']} Point{s}  |  "
+                    embed.description += f"{server_prefix}{x['command']} - {x['points']} Point{s}\n"
                     #embed.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n\n"
 
                 return embed
