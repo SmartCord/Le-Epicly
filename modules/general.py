@@ -17,6 +17,8 @@ Some commands (Specifically fun commands) requires points. If you don't have eno
 the bot will tell you that (Obviously). To purchase points you have to look at the store (Stare at it's soul) and then once
 you find the item/points pack you want to purchase simply use the purchase command.
 
+** To get the amount of points a command needs, please use the get_points command **
+
 Each command has a category and to access a category press one of the reactions below this embed.
 
 ❓ - This menu
@@ -42,20 +44,29 @@ Each command has a category and to access a category press one of the reactions 
                     namex = "User Settings"
                 else:
                     namex = category[0].upper() + category[1:]
-                embed = discord.Embed(title=f"{namex} Commands", color=color())
-                embed.set_thumbnail(url=ctx.me.avatar_url)
-                footer(ctx, embed)
+                
+                pg = commands.Paginator(prefix="", suffix="", max_size=1022)
                 server_prefix = prefix(ctx)
-                embed.description = ""
+
                 for x in db.menu.find({"category":category}):
                     s = "s"
                     if x['points'] < 2:
                         s = ""
-                    #embed.description += f"`{server_prefix}{x['command']} ({x['points']} Point{s})`, "
-                    embed.description += f"{server_prefix}{x['command']} - {x['points']} Point{s}\n"
-                    #embed.description += f"{server_prefix}{x['command']}\n:small_orange_diamond: Points : {x['points']}\n\n"
 
-                return embed
+                    #embed.description += f"`{server_prefix}{x['command']} ({x['points']} Point{s})`, "
+                    #embed.description += f"{server_prefix}{x['command']} - {x['points']} Point{s}\n"
+                    pg.add_line(f"{server_prefix}{x['command']}\n:small_orange_diamond: Point{s} : {x['points']}\n\n")
+
+                embeds = []
+                for page in pg.pages:
+                    embed = discord.Embed(title=f"{namex} Commands", color=color())
+                    embed.set_thumbnail(url=ctx.me.avatar_url)
+                    footer(ctx, embed)
+                    embeds.append(e)
+
+                await menu.delete()
+                p = paginator.EmbedPages(ctx, embeds=embeds)
+                await p.paginate()
 
             doFunction = {
                 '❓':'menu',
@@ -75,8 +86,8 @@ Each command has a category and to access a category press one of the reactions 
                     await menu.edit(embed=e)
                 else:
                     try:
-                        embed = await commandGet(doFunction[str(reaction.emoji)])
-                        await menu.edit(embed=embed)
+                        await commandGet(doFunction[str(reaction.emoji)])
+                        False
                     except KeyError:
                         pass
 
