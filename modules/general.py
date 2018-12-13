@@ -93,6 +93,8 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                         user_input = user_input.split()[0]
                         again = utils.CheckStringSimilarity(key.upper(), user_input.upper())
                         if again >= 0.7:
+                            p = await commandGet(data[x])
+                            await p.paginate()
                             ifwork = True 
                 if not ifwork:
                     await ctx.send("Sorry but that's an invalid category, please check the list above")
