@@ -31,9 +31,9 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
             footer(ctx, e)
             if category != None:
                 menu = await ctx.send(embed=e)
-            reactions = ['💠', '🔧', '😂', '⚙']
-            for reaction in reactions:
-                await menu.add_reaction(reaction)
+                reactions = ['💠', '🔧', '😂', '⚙']
+                for reaction in reactions:
+                    await menu.add_reaction(reaction)
             
             def check(reaction, user):
                 return user == ctx.author
