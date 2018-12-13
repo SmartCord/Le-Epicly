@@ -6,19 +6,21 @@ class FunCommands:
 
     @commands.command()
     async def penis(self, ctx, *, user: discord.Member = None):
+        try:
+            if await pointless(ctx):
+                return 
 
-        if await pointless(ctx):
-            return 
-
-        if user is Nonce:
-            user = ctx.author
-        
-        random.seed(user.id)
-        size = "=" * random.randint(1, 30)
-        e = discord.Embed(title=f"Here is {user.name}'s ding dong size", description=f"8{size}D", color=color())
-        e.set_thumbnail(url=user.avatar_url)
-        footer(ctx, e)
-        await ctx.send(embed=e)
+            if user is Nonce:
+                user = ctx.author
+            
+            random.seed(user.id)
+            size = "=" * random.randint(1, 30)
+            e = discord.Embed(title=f"Here is {user.name}'s ding dong size", description=f"8{size}D", color=color())
+            e.set_thumbnail(url=user.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+        except Exception as e:
+            await botError(self.bot, ctx, e)
 
     @commands.command(aliases=['gay_rate', 'gayrate'])
     async def gay(self, ctx, *, user: discord.Member = None):
