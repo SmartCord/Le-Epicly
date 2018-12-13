@@ -29,7 +29,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
-            if category != None:
+            if category == None:
                 menu = await ctx.send(embed=e)
                 reactions = ['💠', '🔧', '😂', '⚙']
                 for reaction in reactions:
