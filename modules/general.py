@@ -85,7 +85,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                 for x in data.keys():
                     similarity = utils.CheckStringSimilarity(x.upper(), user_input.upper())
                     if similarity >= 0.7:
-                        p = await commandGet(data[x])
+                        p = await commandGet(data[x]) 
                         await p.paginate()
                         ifwork = True
                     else:
