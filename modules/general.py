@@ -89,7 +89,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                         await p.paginate()
                         ifwork = True
                     else:
-                        key = x.split()
+                        key = x.split()[0]
                         user_input = user_input.split()[0]
                         again = utils.CheckStringSimilarity(key.upper(), user_input.upper())
                         if again >= 0.7:
