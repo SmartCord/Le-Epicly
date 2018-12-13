@@ -7,7 +7,7 @@ class Tracker:
         self.antispam = []
 
     async def antiSpam(self, user):
-        await asyncio.sleep(50)
+        await asyncio.sleep(10)
         self.antispam.remove(user)
 
     async def on_message(self, message):
@@ -54,7 +54,7 @@ class Tracker:
 
             if x['xp'] >= x['max_xp']:
                 db.profiles.update_one({"user_id":author}, {'$set':{'xp':1}})
-                db.profiles.update_one({"user_id":author}, {'$inc':{'max_xp':200}})
+                db.profiles.update_one({"user_id":author}, {'$inc':{'max_xp':100}})
                 db.profiles.update_one({"user_id":author}, {'$inc':{'level':1}})
 
 
