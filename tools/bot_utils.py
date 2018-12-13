@@ -29,11 +29,6 @@ async def pointlessRaw(ctx):
         return True
     return False
 
-def haspoints():
-    async def predicate(ctx):
-        if await pointless(ctx):
-            return 
-    return commands.check(predicate)
 
 async def pointless(ctx):
     req_points = 0

@@ -6,6 +6,9 @@ class FunCommands:
 
     @commands.command()
     async def penis(self, ctx, *, user: discord.Member = None):
+        
+        if await pointless(ctx):
+            return 
 
         if user is None:
             user = ctx.author
