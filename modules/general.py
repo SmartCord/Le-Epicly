@@ -29,7 +29,8 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
-            menu = await ctx.send(embed=e)
+            if category != None:
+                menu = await ctx.send(embed=e)
             reactions = ['💠', '🔧', '😂', '⚙']
             for reaction in reactions:
                 await menu.add_reaction(reaction)
@@ -85,9 +86,14 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                     similarity = utils.CheckStringSimilarity(x.upper(), user_input.upper())
                     if similarity >= 0.7:
                         p = await commandGet(data[x])
-                        await menu.delete()
                         await p.paginate()
                         ifwork = True
+                    else:
+                        key = x.split()
+                        user_input = user_input.split()[0]
+                        again = utils.CheckStringSimilarity(key.upper(), user_input.upper())
+                        if again >= 0.7:
+                            ifwork = True 
                 if not ifwork:
                     await ctx.send("Sorry but that's an invalid category, please check the list above")
 
