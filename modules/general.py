@@ -21,7 +21,6 @@ you find the item/points pack you want to purchase simply use the purchase comma
 
 Each command has a category and to access a category press one of the reactions below this embed.
 
-❓ - This menu
 💠 - General Commands 
 🔧 - Utility Commands
 😂 - Fun Commands
@@ -32,7 +31,7 @@ Each command has a category and to access a category press one of the reactions 
             e.set_thumbnail(url=ctx.me.avatar_url)
             footer(ctx, e)
             menu = await ctx.send(embed=e)
-            reactions = ['❓', '💠', '🔧', '😂', '⚙']
+            reactions = ['💠', '🔧', '😂', '⚙']
             for reaction in reactions:
                 await menu.add_reaction(reaction)
             
@@ -79,17 +78,23 @@ Each command has a category and to access a category press one of the reactions 
             while True:
                 reaction, message = await self.bot.wait_for('reaction_add', check=check)
                 try:
-                    await menu.remove_reaction(str(reaction.emoji), ctx.author)
-                except:
+                    await commandGet(doFunction[str(reaction.emoji)])
+                    break 
+                except KeyError:
                     pass
-                if str(reaction.emoji) == "❓":
-                    await menu.edit(embed=e)
-                else:
-                    try:
-                        await commandGet(doFunction[str(reaction.emoji)])
-                        False
-                    except KeyError:
-                        pass
+
+                # try:
+                #     await menu.remove_reaction(str(reaction.emoji), ctx.author)
+                # except:
+                #     pass
+                # if str(reaction.emoji) == "❓":
+                #     await menu.edit(embed=e)
+                # else:
+                #     try:
+                #         await commandGet(doFunction[str(reaction.emoji)])
+                #         False
+                #     except KeyError:
+                #         pass
 
         except Exception as e:
             await botError(self.bot, ctx, e)
