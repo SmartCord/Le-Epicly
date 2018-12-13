@@ -37,11 +37,11 @@ class LeEpic(commands.AutoShardedBot):
                 db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{'points':-req_points}})
 
     async def on_ready(self):
-        channel = self.bot.get_channel(517272487201865728)
+        channel = self.get_channel(517272487201865728)
         oof = "\n".join(self.loads_xd)
         e = discord.Embed(title="The bot have launched", description=f"```{oof}```", color=color())
-        e.set_thumbnail(url=self.bot.user.avatar_url)
-        footer(self.bot.user, e)
+        e.set_thumbnail(url=self.user.avatar_url)
+        footer(self.user, e)
         await channel.send(embed=e)
         print("Ok this is epic")
 
