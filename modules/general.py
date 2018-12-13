@@ -61,11 +61,10 @@ Each command has a category and to access a category press one of the reactions 
                     embed = discord.Embed(title=f"{namex} Commands", color=color())
                     embed.set_thumbnail(url=ctx.me.avatar_url)
                     footer(ctx, embed)
-                    embeds.append(e)
+                    embeds.append(embed)
 
-                await menu.delete()
                 p = paginator.EmbedPages(ctx, embeds=embeds)
-                await p.paginate()
+                return p
 
             doFunction = {
                 '❓':'menu',
@@ -74,12 +73,14 @@ Each command has a category and to access a category press one of the reactions 
                 '😂':'fun',
                 '⚙':'user_settings'
             }
-            
-            while True:
+            yyy = True
+            while yyy is True:
                 reaction, message = await self.bot.wait_for('reaction_add', check=check)
                 try:
-                    await commandGet(doFunction[str(reaction.emoji)])
-                    break 
+                    p = await commandGet(doFunction[str(reaction.emoji)])
+                    await menu.delete()
+                    await p.paginate()
+                    yyy = False
                 except KeyError:
                     pass
 
