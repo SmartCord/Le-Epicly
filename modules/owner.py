@@ -34,13 +34,13 @@ class OwnerGay:
             else:
                 data = {
                     'name':name,
-                    'points':points
+                    'points':int(points)
                 }
                 db.commands.insert_one(data)
             data = {
                 'category':category,
                 'command':name,
-                'points':points
+                'points':int(points)
             }
 
             db.menu.insert_one(data)
