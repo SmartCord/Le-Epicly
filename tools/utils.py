@@ -168,8 +168,9 @@ async def giveAchievement(user, id, extra=None):
         await user.send(embed=e)
         db.profiles.update_one({"user_id":user.id}, {'$inc':{'coins':x['coins'], 'diamonds':x['diamonds']}})
 
-async def botError(bot, message, e):
-    e = traceback.format_exc()
+async def botError(bot, message, e, handler=False):
+    if not handler:
+        e = traceback.format_exc()
     em = discord.Embed(title="Oh well an unexpected error has occured", description=f"```{e}```\nThe error has now been sent to the bot developer. (Thank goodness)", color=r)
     em.set_thumbnail(url=gif['disappointed1'])
     footer(message, em)

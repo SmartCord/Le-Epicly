@@ -28,7 +28,7 @@ class SuchError:
                 e.set_thumbnail(url=ctx.me.avatar_url)
                 return await ctx.send(embed=e)
 
-        await botError(self.bot, ctx, error)
+        await botError(self.bot, ctx, error.__traceback__, handler=True)
 
 def setup(bot):
     bot.add_cog(SuchError(bot))
