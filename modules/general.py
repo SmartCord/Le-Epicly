@@ -44,7 +44,7 @@ Each command has a category and to access a category press one of the reactions 
                 else:
                     namex = category[0].upper() + category[1:]
                 
-                pg = commands.Paginator(prefix="", suffix="", max_size=1022)
+                pg = commands.Paginator(prefix="", suffix="", max_size=500)
                 server_prefix = prefix(ctx)
 
                 for x in db.menu.find({"category":category}):
@@ -54,7 +54,7 @@ Each command has a category and to access a category press one of the reactions 
 
                     #embed.description += f"`{server_prefix}{x['command']} ({x['points']} Point{s})`, "
                     #embed.description += f"{server_prefix}{x['command']} - {x['points']} Point{s}\n"
-                    pg.add_line(f"{server_prefix}{x['command']}\n:small_orange_diamond: Point{s} : {x['points']}\n\n")
+                    pg.add_line(f"{server_prefix}{x['command']}\n:small_orange_diamond: Point{s} : {x['points']}\n")
 
                 embeds = []
                 for page in pg.pages:
