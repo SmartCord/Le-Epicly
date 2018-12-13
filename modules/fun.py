@@ -10,7 +10,7 @@ class FunCommands:
             if await pointless(ctx):
                 return 
 
-            if user is Nonce:
+            if user is None:
                 user = ctx.author
             
             random.seed(user.id)
