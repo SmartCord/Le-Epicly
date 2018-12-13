@@ -3,6 +3,10 @@ import datetime, random
 from tools.bot_tools import db
 from lxml.html import fromstring
 import requests
+from difflib import SequenceMatcher
+
+def CheckStringSimilarity(a, b):
+    return SequenceMatcher(None, a, b).ratio()
 
 
 default_prefix = "?"

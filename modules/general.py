@@ -7,19 +7,18 @@ class GeneralCommands:
         self.purchases = []
 
     @commands.command()
-    async def help(self, ctx):
+    async def help(self, ctx, *, category: str = None):
         try:
             e = discord.Embed(title="Welcome to the one and only amazing spectacular unbelievably interactive help command.", color=color())
-            e.description = """
+            e.description = f"""
 In this documentation you will learn how to use the discord bot correctly.
 
 Some commands (Specifically fun commands) requires points. If you don't have enough points
 the bot will tell you that (Obviously). To purchase points you have to look at the store (Stare at it's soul) and then once
 you find the item/points pack you want to purchase simply use the purchase command.
 
-** To get the amount of points a command needs, please use the get_points command **
-
 Each command has a category and to access a category press one of the reactions below this embed.
+Alternatively you can type `{prefix(ctx)}help category_name_here`
 
 💠 - General Commands 
 🔧 - Utility Commands
@@ -73,6 +72,25 @@ Each command has a category and to access a category press one of the reactions 
                 '😂':'fun',
                 '⚙':'user_settings'
             }
+            if category != None:
+                ifwork = False
+                user_input = category.replace("_", " ")
+                data = {
+                    'General Commands':'general',
+                    'Utility Commands':'utility',
+                    'Fun Commands':'fun',
+                    'User Settings':'user_settings'
+                }
+                for x in data.keys():
+                    similarity = utils.CheckStringSimilarity(x.upper(), user_input.upper())
+                    if similarity >= 0.7:
+                        p = await commandGet(data[x])
+                        await menu.delete()
+                        await p.paginate()
+                        ifwork = True
+                if not ifwork:
+                    await ctx.send("Sorry but that's an invalid category, please check the list above")
+
             yyy = True
             while yyy is True:
                 reaction, message = await self.bot.wait_for('reaction_add', check=check)
