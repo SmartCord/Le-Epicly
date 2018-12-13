@@ -58,7 +58,7 @@ Each command has a category and to access a category press one of the reactions 
 
                 embeds = []
                 for page in pg.pages:
-                    embed = discord.Embed(title=f"{namex} Commands", color=color())
+                    embed = discord.Embed(title=f"{namex} Commands", description=page, color=color())
                     embed.set_thumbnail(url=ctx.me.avatar_url)
                     footer(ctx, embed)
                     embeds.append(embed)
