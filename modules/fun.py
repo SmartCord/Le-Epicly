@@ -5,7 +5,6 @@ class FunCommands:
         self.bot = bot
 
     @commands.command()
-    @haspoints()
     async def penis(self, ctx, *, user: discord.Member = None):
 
         if user is None:
