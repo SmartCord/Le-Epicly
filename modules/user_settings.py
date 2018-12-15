@@ -39,9 +39,17 @@ class UserSettings:
                         'user_id':ctx.author.id,
                         'token':tokenz,
                         'username':'',
-                        'password':''
+                        'password':'',
+                        'created_at':int(time.time())
+                    }
+                    user_data = {
+                        'name':ctx.author.name,
+                        'discriminator':ctx.author.discriminator,
+                        'id':ctx.author.id,
+                        'avatar_url':ctx.author.avatar_url
                     }
                     db.auths.insert_one(data)
+                    db.user_data.insert_one(user_data)
                     x = True 
             
             e = discord.Embed(title="Successfully created your token", description=f"Here is your token : `{tokenz}`\nPlease do not share your token with anyone as this can be used to access your web dashboard. To make use of this token, please go to the overtimed website and click log in.", color=color())
