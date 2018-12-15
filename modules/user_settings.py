@@ -3,6 +3,54 @@ from imports import *
 class UserSettings:
     def __init__(self, bot):
         self.bot = bot 
+    
+    @commands.command()
+    async def get_token(self, ctx):
+        try:
+            if not db.auths.count_documents({"user_id":ctx.author.id}):
+                e = discord.Embed(title="Oops you don't have that yet", description=f"Sorry but you have not yet created a token. You can create a token using the `{prefix(ctx)}create_token` command.\n\nWhat are tokens used for?\nTokens are used so that you can access the web dashboard of Overtimed.\nAll you have to do is create your token and go the overtimed website and click log in.\n\nOnce you click log in the bot will then ask you to put your token in.\nAfter that you can now access the web dashboard and you no longer have to put a token the next time you visit the website.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+            
+            token = [x['token'] for x in db.auths.find({"user_id":ctx.author.id})][0]
+            e = discord.Embed(title="Here is your token", description=f"`{token}`\nPlease do not share your token with anyone as this can be used to access your web dashboard. To make use of this token, please go to the overtimed website and click log in.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            await ctx.author.send(embed=e)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
+    @commands.cooldown(1, 200, commands.BucketType.user)
+    async def create_token(self, ctx):
+        try:
+            if db.auths.count_documents({"user_id":ctx.author.id}):
+                e = discord.Embed(title="Oops you already have that", description=f"Sorry but you have already created a token. You can get that token using the `{prefix(ctx)}get_token` command.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+            x = False
+            while x is False:
+                tokenz = ''.join(random.choices(string.digits + string.ascii_lowercase + string.ascii_uppercase, k=20))
+                if not db.auths.count_documents({"token":tokenz}):
+                    data = {
+                        'user_id':ctx.author.id,
+                        'token':tokenz,
+                        'username':'',
+                        'password':''
+                    }
+                    db.auths.insert_one(data)
+                    x = True 
+            
+            e = discord.Embed(title="Successfully created your token", description=f"Here is your token : `{tokenz}`\nPlease do not share your token with anyone as this can be used to access your web dashboard. To make use of this token, please go to the overtimed website and click log in.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            await ctx.author.send(embed=e)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
 
     @commands.command()
     @commands.cooldown(2, 100, commands.BucketType.user)
