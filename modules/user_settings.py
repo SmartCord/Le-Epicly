@@ -42,35 +42,33 @@ class UserSettings:
                         'password':'',
                         'created_at':int(time.time())
                     }
-                    guilds = []
-                    for x in self.bot.guilds:
-                        for member in x.members:
+                    guilds_ids = []
+                    for guild in self.bot.guilds:
+                        for member in guild.members:
                             if member == ctx.author:
                                 channels = []
-                                # if x not in guilds:
-                                for channel in x.text_channels:
-                                    if channel.guild == x:
-                                        data_up = {
-                                            'name':channel.name,
-                                            'id':channel.id,
-                                            'position':channel.position
-                                        }
-                                        channels.append(data_up)
-                                guild = x
+                                for channel in guild.text_channels:
+                                    data_up = {
+                                        'name':channel.name,
+                                        'id':channel.id,
+                                        'position':channel.position
+                                    }
+                                    channels.append(data_up)
+                                guilds_ids.append(guild.id)
                                 data_guild = {
                                     'id':guild.id,
                                     'name':guild.name,
                                     'icon_url':guild.icon_url,
                                     'text_channels':channels
                                 }
-                                guilds.append(data_guild)
-                                
+                                db.guilds.insert_one(data_guild)
+
                     user_data = {
                         'name':ctx.author.name,
                         'discriminator':ctx.author.discriminator,
                         'id':ctx.author.id,
                         'avatar_url':ctx.author.avatar_url,
-                        'guilds':guilds
+                        'guilds':guilds_ids
                     }
                     db.auths.insert_one(data)
                     db.user_data.insert_one(user_data)
