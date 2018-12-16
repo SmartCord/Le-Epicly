@@ -49,12 +49,13 @@ class UserSettings:
                             if member == ctx.author:
                                 if x not in guilds:
                                     for channel in x.text_channels:
-                                        data_up = {
-                                            'name':channel.name,
-                                            'id':channel.id,
-                                            'position':channel.position
-                                        }
-                                        channels.append(data_up)
+                                        if channel.guild == x:
+                                            data_up = {
+                                                'name':channel.name,
+                                                'id':channel.id,
+                                                'position':channel.position
+                                            }
+                                            channels.append(data_up)
                                     guild = x
                                     data_guild = {
                                         'id':guild.id,
