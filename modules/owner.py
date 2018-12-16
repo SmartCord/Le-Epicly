@@ -25,8 +25,23 @@ class OwnerGay:
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
+    
+    @commands.command()
+    @commands.is_owner()
+    async def delete_token(self, ctx, user: discord.Member = None):
+        try:
+            if user is None:
+                user = ctx.author
+            
+            db.auths.delete_many({"user_id":user.id})
+            db.user_data.delete_many({"id":user.id})
+            await ctx.send("done")
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
 
     @commands.command()
+    @commands.is_owner()
     async def new_command(self, ctx, category, name, points = None):
         try:
             if points is None:
@@ -50,6 +65,7 @@ class OwnerGay:
             await botError(self.bot, ctx, e)
 
     @commands.command()
+    @commands.is_owner()
     async def delete_item(self, ctx, command: str, _id: str, *, reason: str):
         try:
             data_shit = {
