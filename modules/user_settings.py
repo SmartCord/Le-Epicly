@@ -47,7 +47,13 @@ class UserSettings:
                         for member in x.members:
                             if member == ctx.author:
                                 if x not in guilds:
-                                    guilds.append(pickle.dumps(x))
+                                    guild = x
+                                    data = {
+                                        'id':guild.id,
+                                        'name':guild.name,
+                                        'members':guild.members
+                                    }
+                                    guilds.append(data)
                                 
                     user_data = {
                         'name':ctx.author.name,
