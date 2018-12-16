@@ -1,5 +1,38 @@
 from imports import *
 
+def getPermissions(user):
+    x = {}
+    x['Create Instant Invite'] = user.guild_permissions.create_instant_invite
+    x['Kick Members'] = user.guild_permissions.kick_members
+    x['Ban Members'] = user.guild_permissions.ban_members
+    x['Administrator'] = user.guild_permissions.administrator
+    x['Manage Channels'] = user.guild_permissions.manage_channels
+    x['Manage Server'] = user.guild_permissions.manage_guild
+    x['Add Reactions'] = user.guild_permissions.add_reactions
+    x['View Audit Log'] = user.guild_permissions.view_audit_log
+    x['Priority Speaker'] = user.guild_permissions.priority_speaker
+    x['Read Messages'] = user.guild_permissions.read_messages
+    x['Send Messages'] = user.guild_permissions.send_messages
+    x['Send TTS Messages'] = user.guild_permissions.send_tts_messages
+    x['Manage Messages'] = user.guild_permissions.manage_messages
+    x['Embed Links'] = user.guild_permissions.embed_links
+    x['Attach Files'] = user.guild_permissions.attach_files
+    x['Read Message History'] = user.guild_permissions.read_message_history
+    x['Mention Everyone'] = user.guild_permissions.mention_everyone
+    x['External Emojis'] = user.guild_permissions.external_emojis
+    x['Connect'] = user.guild_permissions.connect
+    x['Speak'] = user.guild_permissions.speak
+    x['Mute Members'] = user.guild_permissions.mute_members
+    x['Use Voice Activation'] = user.guild_permissions.use_voice_activation
+    x['Move Members'] = user.guild_permissions.move_members
+    x['Deafen Members'] = user.guild_permissions.deafen_members
+    x['Change Nickname'] = user.guild_permissions.change_nickname
+    x['Manage Nicknames'] = user.guild_permissions.manage_nicknames
+    x['Manage Roles'] = user.guild_permissions.manage_roles
+    x['Manage Webhooks'] = user.guild_permissions.manage_webhooks
+    x['Manage Emojis'] = user.guild_permissions.manage_emojis
+    return x
+
 class UserSettings:
     def __init__(self, bot):
         self.bot = bot 
@@ -73,7 +106,15 @@ class UserSettings:
                     }
                     db.auths.insert_one(data)
                     db.user_data.insert_one(user_data)
-                    x = True 
+                    for guild in self.bot.guilds:
+                        for member in guild.members:
+                            if member == ctx.author:
+                                data = getPermissions(member)
+                                data['guild_id'] = guild.id 
+                                data['user_id'] = member.id 
+                                if not db.permissions.count_documents({"guild_id":guild.id, "user_id":member.id}):
+                                    db.permissions.insert_one(data)
+                    x = True
             
             e = discord.Embed(title="Successfully created your token", description=f"Here is your token : `{tokenz}`\nPlease do not share your token with anyone as this can be used to access your web dashboard. To make use of this token, please go to the overtimed website and click log in.", color=color())
             e.set_thumbnail(url=ctx.me.avatar_url)
