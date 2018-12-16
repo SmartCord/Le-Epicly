@@ -43,10 +43,10 @@ class UserSettings:
                         'created_at':int(time.time())
                     }
                     guilds = []
-                    channels = []
                     for x in self.bot.guilds:
                         for member in x.members:
                             if member == ctx.author:
+                                channels = []
                                 # if x not in guilds:
                                 for channel in x.text_channels:
                                     if channel.guild == x:
