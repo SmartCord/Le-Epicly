@@ -56,14 +56,13 @@ class UserSettings:
                                         }
                                         channels.append(data_up)
                                     guild = x
-                                    data = {
+                                    data_guild = {
                                         'id':guild.id,
                                         'name':guild.name,
-                                        'members':guild.members,
                                         'icon_url':guild.icon_url,
                                         'text_channels':channels
                                     }
-                                    guilds.append(data)
+                                    guilds.append(data_guild)
                                 
                     user_data = {
                         'name':ctx.author.name,
