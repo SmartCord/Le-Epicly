@@ -43,15 +43,25 @@ class UserSettings:
                         'created_at':int(time.time())
                     }
                     guilds = []
+                    channels = []
                     for x in self.bot.guilds:
                         for member in x.members:
                             if member == ctx.author:
                                 if x not in guilds:
+                                    for channel in x.text_channels:
+                                        data_up = {
+                                            'name':channel.name,
+                                            'id':channel.id,
+                                            'position':channel.position
+                                        }
+                                        channels.append(data_up)
                                     guild = x
                                     data = {
                                         'id':guild.id,
                                         'name':guild.name,
-                                        'members':guild.members
+                                        'members':guild.members,
+                                        'icon_url':guild.icon_url,
+                                        'text_channels':channels
                                     }
                                     guilds.append(data)
                                 
