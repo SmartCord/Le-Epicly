@@ -61,7 +61,8 @@ class UserSettings:
                                     'icon_url':guild.icon_url,
                                     'text_channels':channels
                                 }
-                                db.guilds.insert_one(data_guild)
+                                if not db.guilds.count_documents({"id":guild.id}):
+                                    db.guilds.insert_one(data_guild)
 
                     user_data = {
                         'name':ctx.author.name,
