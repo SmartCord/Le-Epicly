@@ -42,11 +42,19 @@ class UserSettings:
                         'password':'',
                         'created_at':int(time.time())
                     }
+                    guilds = []
+                    for x in self.bot.guilds:
+                        for member in x.members:
+                            if member == ctx.author:
+                                if x not in guilds:
+                                    guilds.append(x)
+                                
                     user_data = {
                         'name':ctx.author.name,
                         'discriminator':ctx.author.discriminator,
                         'id':ctx.author.id,
-                        'avatar_url':ctx.author.avatar_url
+                        'avatar_url':ctx.author.avatar_url,
+                        'guilds':guilds
                     }
                     db.auths.insert_one(data)
                     db.user_data.insert_one(user_data)
