@@ -28,8 +28,8 @@ class FunCommands:
             shits = []
             for mention in mentions:
                 for item in question.split():
-                    item.replace(mention.mention, mention.name)
-                    shits.append(item)
+                    ix = item.replace(mention.mention, mention.name)
+                    shits.append(ix)
 
 
             question = " ".join(shits)
