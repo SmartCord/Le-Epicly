@@ -72,7 +72,7 @@ class GeneralCommands:
                 'transfered_item':item.lower()
             }
             db.transfer_history.insert_one(data)
-            if len(db.transfer_history.count_documents({"transferer":ctx.author.id})) == 1:
+            if db.transfer_history.count_documents({"transferer":ctx.author.id}) == 1:
                 await giveAchievement(ctx.author, 5, extra="for using the transfer command once")
 
         except Exception as e:

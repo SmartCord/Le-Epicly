@@ -63,7 +63,7 @@ class FunCommands:
                 'command':'penis'
             }
             db.command_log_counter.insert_one(data)
-            if len(db.command_log_counter.count_documents({"user_id":ctx.author.id})) == 1:
+            if db.command_log_counter.count_documents({"user_id":ctx.author.id}) == 1:
                 await giveAchievement(ctx.author, 6, extra="for using the penis command once")
         except Exception as e:
             await botError(self.bot, ctx, e)
