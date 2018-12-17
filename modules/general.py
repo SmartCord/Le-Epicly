@@ -66,7 +66,7 @@ class GeneralCommands:
                 now = f"You no longer have any {item.lower()} left."
             elif left == 1:
                 now = f"You only have 1 more {item.lower().replace('s', '')} left."
-            e = discord.Embed(title="Successfully Transfered", description=f"You gave {user.mention} {amount} {itemCaller}. {left}", color=color())
+            e = discord.Embed(title="Successfully Transfered", description=f"You gave {user.mention} {amount} {itemCaller}. {now}", color=color())
             e.set_thumbnail(url=ctx.author.avatar_url)
             footer(ctx, e)
             await ctx.send(embed=e)
