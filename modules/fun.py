@@ -7,6 +7,10 @@ class FunCommands:
     @commands.command(name="8ball")
     async def ball8(self, ctx, *, question: str = None):
         try:
+
+            if await pointless(ctx):
+                return
+
             if question is None:
                 return await usage(ctx, ['question'], ['am i gay?'], 'Lets you ask the 8ball.')
             
