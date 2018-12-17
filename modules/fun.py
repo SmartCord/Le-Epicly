@@ -26,10 +26,11 @@ class FunCommands:
             ]
             mentions = ctx.message.mentions 
             shits = []
-            for mention in mentions:
-                for item in question.split():
-                    ix = item.replace(mention.mention, mention.name)
-                    shits.append(ix)
+            if mentions != []:
+                for mention in mentions:
+                    for item in question.split():
+                        ix = item.replace(mention.mention, mention.name)
+                        shits.append(ix)
 
 
             question = " ".join(shits)
