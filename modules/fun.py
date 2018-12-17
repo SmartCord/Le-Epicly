@@ -58,7 +58,7 @@ class FunCommands:
             e.set_thumbnail(url=user.avatar_url)
             footer(ctx, e)
             await ctx.send(embed=e)
-            if not db.command_log_counter.count_documents({"user_id":ctx.author.id, "command":"penis"})
+            if not db.command_log_counter.count_documents({"user_id":ctx.author.id, "command":"penis"}):
                 data = {
                     'user_id':ctx.author.id,
                     'command':'penis'
