@@ -5,6 +5,9 @@ class FunCommands:
         self.bot = bot
 
     @commands.command()
+    async def 
+
+    @commands.command()
     async def penis(self, ctx, *, user: discord.Member = None):
         try:
             if await pointless(ctx):

@@ -7,6 +7,78 @@ class GeneralCommands:
         self.purchases = []
 
     @commands.command()
+    @commands.cooldown(2, 20, commands.BucketType.user)
+    async def transfer(self, ctx, item: str = None, amount: str = None, *, user: discord.Member = None):
+        try:
+            if item is None or amount is None:
+                return await usage(ctx, ['item', 'amount', 'user to give'], ['points', '100', ctx.author.mention], f'Lets you give the mentioned user some points, coins, or diamonds. To give the user reputation use the `{prefix(ctx)}rep` command instead.')
+            if not item.endswith("s"):
+                item = item + "s"
+            items = ('COINS', 'POINTS', 'DIAMONDS')
+            if not item.upper() in items:
+                e = discord.Embed(title="Oops, that's not an available item", description="Here are the list of the available items.\n\nPoints\nCoins\nDiamonds", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+            try:
+                amount = int(amount)
+            except:
+                e = discord.Embed(title="Amount must be an integer", description=f"Sorry but the amount `{amount}` is not an integer. Make sure there are no extra characters and only numbers.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            itemCaller = item.lower().replace('s', '') if amount < 2 else item.lower()
+            user_items = [x[item.lower()] for x in db.profiles.find({"user_id":ctx.author.id})][0]
+            but = "undefined, item lower than 0"
+
+
+            if user_items == 0:
+                but = f"but you don't have any {item.lower()} left."
+            elif user_items == 1:
+                but = f"but you only have 1 more {item.lower().replace('s', '')} left."
+            else:
+                but = f"but you only have {user_items} {item.lower()} left."
+
+
+            left = user_items - amount
+            if left < 0:
+                e = discord.Embed(title=f"Not enough {item.lower()}", description=f"You're trying to give {amount} {itemCaller} {but}", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
+            db.profiles.update_one({"user_id":user.id}, {'$inc':{item.lower():amount}})
+            db.profiles.update_one({"user_id":ctx.author.id}, {'$inc':{item.lower():-amount}})
+
+            s = "s"
+            if amount < 2:
+                s = ""
+            now = f"You now have {left} {item.lower()} left."
+            if left == 0:
+                now = f"You no longer have any {item.lower()} left."
+            elif left == 1:
+                now = f"You only have 1 more {item.lower().replace('s', '')} left."
+            e = discord.Embed(title="Successfully Transfered", description=f"You gave {user.mention} {amount} {itemCaller}. {left}", color=color())
+            e.set_thumbnail(url=ctx.author.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+
+            data = {
+                'transferer':ctx.author.id,
+                'transfered_on':int(time.time()),
+                'transfered_to':user.id,
+                'transfered_amount':amount,
+                'transfered_item':item.lower()
+            }
+            db.transfer_history.insert_one(data)
+            if len(db.transfer_history.count_documents({"transferer":ctx.author.id})) == 1:
+                await giveAchievement(ctx.author, 5, extra="for using the transfer command once")
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
+
+    @commands.command()
     async def help(self, ctx, *, category: str = None):
         try:
             e = discord.Embed(title="Welcome to the one and only amazing spectacular unbelievably interactive help command.", color=color())
@@ -161,7 +233,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
     async def buy(self, ctx, *, item: str = None):
         try:
             if item is None:
-                return await usage(ctx, ['item name'], ['i like memes'], 'Lets you purchase an item from the store.')
+                return await usage(ctx, ['item name'], ["it's raining points"], 'Lets you purchase an item from the store.')
 
             item = item.upper()
             appended_data = [ctx.author.id, ctx.channel.id]
@@ -263,6 +335,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                         return await ctx.send("Timedout")
 
                 if reaction.emoji == coin:
+                    purchase_methord = "coins"
                     if user_coins < coins:
                         e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_coins} Coin{c} and that item costs {coins} Coins.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
@@ -292,6 +365,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                         x = True
 
                 elif reaction.emoji == diamond:
+                    purchase_method = "diamonds"
                     if user_diamonds < diamonds:
                         e = discord.Embed(title="Not enough diamonds :(", description=f"You only have {user_diamonds} Diamond{d} and that item costs {diamonds} Diamonds.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
@@ -327,6 +401,14 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                     return
 
             await success(ctx, f"Successfully purchased the item `{name}`, {message}")
+            data = {
+                'purchaser':ctx.author.id,
+                'purchased_on':int(time.time()),
+                'purchased_item':item,
+                'purchase_method':purchase_method,
+                'left':left
+            }
+            db.purchase_history.insert_one(data)
             self.purchases.remove(appended_data)
 
         except Exception as e:

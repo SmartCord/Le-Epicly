@@ -25,6 +25,19 @@ class OwnerGay:
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
+
+    @commands.command()
+    @commands.is_owner()
+    async def dropCol(self, ctx, collection):
+        try:
+            cols = db.collection_names()
+            if collection in cols:
+                db[collection].drop()
+                await ctx.send('done')
+            else:
+                await ctx.send('col unknown')
+        except Exception as e:
+            await botError(self.bot, ctx, e)
     
     @commands.command()
     @commands.is_owner()
@@ -42,8 +55,12 @@ class OwnerGay:
 
     @commands.command()
     @commands.is_owner()
-    async def new_command(self, ctx, category, name, points = None):
+    async def new_command_owner(self, ctx, category, name, points = None):
         try:
+
+            if db.menu.count_documents({"name":name}):
+                return await ctx.send('exists already')
+
             if points is None:
                 points = 0
             else:
