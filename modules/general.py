@@ -10,8 +10,15 @@ class GeneralCommands:
     @commands.cooldown(2, 20, commands.BucketType.user)
     async def transfer(self, ctx, item: str = None, amount: str = None, *, user: discord.Member = None):
         try:
-            if item is None or amount is None:
+            if item is None or amount is None or user is None:
                 return await usage(ctx, ['item', 'amount', 'user to give'], ['points', '100', ctx.author.mention], f'Lets you give the mentioned user some points, coins, or diamonds. To give the user reputation use the `{prefix(ctx)}rep` command instead.')
+            
+            if user is ctx.author:
+                e = discord.Embed(title="Uhh no", description="Sorry but you can't transfer shit to your self", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
+                footer(ctx, e)
+                return await ctx.send(embed=e)
+
             if not item.endswith("s"):
                 item = item + "s"
             items = ('COINS', 'POINTS', 'DIAMONDS')
@@ -63,6 +70,11 @@ class GeneralCommands:
             e.set_thumbnail(url=ctx.author.avatar_url)
             footer(ctx, e)
             await ctx.send(embed=e)
+
+            e = discord.Embed(title=f"You recieved a gift from {ctx.author.name}", description=f"{ctx.author.name} has decided to give you {amount} {itemCaller}.", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(user, e)
+            await user.send(embed=e)
 
             data = {
                 'transferer':ctx.author.id,
