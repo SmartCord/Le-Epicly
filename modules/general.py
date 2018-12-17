@@ -19,7 +19,7 @@ class GeneralCommands:
                 footer(ctx, e)
                 return await ctx.send(embed=e)
 
-            if not item.endswith("s"):
+            if not item.lower().endswith("s"):
                 item = item + "s"
             items = ('COINS', 'POINTS', 'DIAMONDS')
             if not item.upper() in items:
