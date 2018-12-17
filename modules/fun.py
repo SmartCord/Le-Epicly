@@ -3,6 +3,45 @@ from imports import *
 class FunCommands:
     def __init__(self, bot):
         self.bot = bot
+    
+    @commands.command(name="8ball")
+    async def ball8(self, ctx, *, question: str = None):
+        try:
+            if question is None:
+                return await usage(ctx, ['question'], ['am i gay?'], 'Lets you ask the 8ball.')
+            
+            answers = [
+                'It is certain',
+                'It is decidedly so',
+                'Without a doubt',
+                'Yes',
+                'You may rely on it',
+                'As I see it, yes',
+                'Most likely',
+                "Don't count on it",
+                'My reply is no',
+                'My sources say no',
+                'Outlook not so good',
+                'Very doubtful'
+            ]
+            mentions = ctx.message.mentions 
+            shits = []
+            for mention in mentions:
+                for item in question.split():
+                    item.replace(mention.mention, mention.name)
+                    shits.append(item)
+
+
+            question = " ".join()
+            question_lil = question.replace("?", "").replace(".", "").replace('"', "").replace("'", "").replace(",", "").replace(" ", "").upper()
+            random.seed(question_lil)
+            e = discord.Embed(title=question, description=f":8ball: {random.choice(answers)}", color=color())
+            e.set_thumbnail(url=ctx.me.avatar_url)
+            footer(ctx, e)
+            await ctx.send(embed=e)
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
 
     @commands.command()
     async def penis(self, ctx, *, user: discord.Member = None):
@@ -19,6 +58,13 @@ class FunCommands:
             e.set_thumbnail(url=user.avatar_url)
             footer(ctx, e)
             await ctx.send(embed=e)
+            data = {
+                'user_id':ctx.author.id,
+                'command':'penis'
+            }
+            db.command_log_counter.insert_one(data)
+            if len(db.command_log_counter.count_documents({"user_id":ctx.author.id})) == 1:
+                await giveAchievement(ctx.author, 6, extra="for using the penis command once")
         except Exception as e:
             await botError(self.bot, ctx, e)
 
