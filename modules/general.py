@@ -73,7 +73,7 @@ class GeneralCommands:
             }
             db.transfer_history.insert_one(data)
             if db.transfer_history.count_documents({"transferer":ctx.author.id}) == 1:
-                await giveAchievement(ctx.author, 5, extra="for using the transfer command once")
+                await giveAchievement(ctx.author, 7, extra="for using the transfer command once")
 
         except Exception as e:
             await botError(self.bot, ctx, e)
