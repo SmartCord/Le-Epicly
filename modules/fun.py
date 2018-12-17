@@ -31,10 +31,12 @@ class FunCommands:
                     for item in question.split():
                         ix = item.replace(mention.mention, mention.name)
                         shits.append(ix)
+            else:
+                shits = question.split()
 
             question = " ".join(shits)
             
-            question = question.upper().replace("AM I", "Is")
+            question = question.upper().replace("AM I", "Is {ctx.author.name}")
             question_lil = question.replace("?", "").replace(".", "").replace('"', "").replace("'", "").replace(",", "").replace(" ", "").upper()
             random.seed(question_lil)
             e = discord.Embed(title=question, description=f":8ball: {random.choice(answers)}", color=color())
