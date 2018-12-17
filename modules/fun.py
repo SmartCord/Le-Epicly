@@ -35,8 +35,8 @@ class FunCommands:
                 shits = question.split()
 
             question = " ".join(shits)
-            
-            question = question.upper().replace("AM I", "Is {ctx.author.name}")
+            question = question.upper().replace("AM I", f"Is {ctx.author.name}").lower()
+            question = question[0].upper() + question[1:]
             question_lil = question.replace("?", "").replace(".", "").replace('"', "").replace("'", "").replace(",", "").replace(" ", "").upper()
             random.seed(question_lil)
             e = discord.Embed(title=question, description=f":8ball: {random.choice(answers)}", color=color())
