@@ -347,7 +347,7 @@ Alternatively you can type `{prefix(ctx)}help category_name_here`
                         return await ctx.send("Timedout")
 
                 if reaction.emoji == coin:
-                    purchase_methord = "coins"
+                    purchase_method = "coins"
                     if user_coins < coins:
                         e = discord.Embed(title="Not enough coins :(", description=f"You only have {user_coins} Coin{c} and that item costs {coins} Coins.", color=color())
                         e.set_thumbnail(url=ctx.me.avatar_url)
