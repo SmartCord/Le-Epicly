@@ -8,5 +8,5 @@ import random, requests, asyncio, discord, time, ast, io, traceback, textwrap, a
 from io import BytesIO
 from contextlib import redirect_stdout
 from PIL import Image, ImageFilter, ImageEnhance, ImageDraw, ImageFont
-from tools.utils import color, prefix, usage, error, success, footer, botError
-from tools.bot_utils import pointless, Counters, giveAchievement, pointlessRaw, getPoints, Embed
+from tools.utils import color, prefix, usage, error, success, footer, botError, Embed
+from tools.bot_utils import pointless, Counters, giveAchievement, pointlessRaw, getPoints
