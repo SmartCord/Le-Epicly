@@ -168,6 +168,21 @@ async def giveAchievement(user, id, extra=None):
         await user.send(embed=e)
         db.profiles.update_one({"user_id":user.id}, {'$inc':{'coins':x['coins'], 'diamonds':x['diamonds']}})
 
+async def Embed(ctx, title, description, thumbnail=None):
+    shits = []
+    mentions = ctx.message.mentions 
+    if mentions != []:
+        for member in mentions:
+            for part in title.split():
+                item = part.replace(member.mention, member.name)
+                shits.append(item)
+        title = " ".join(shits)
+
+    e = discord.Embed(title=title, description=description, color=color())
+    e.set_thumbnail(url=ctx.me.avatar_url) if thumbnail is None else e.set_thumbnail(url=thumbnail)
+    footer(ctx, e)
+    await ctx.send(embed=e)
+
 async def botError(bot, message, e, handler=False):
     if not handler:
         e = traceback.format_exc()

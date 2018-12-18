@@ -3,6 +3,39 @@ from imports import *
 class FunCommands:
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command()
+    async def ask(self, ctx, *, question: str = None):
+        try:
+            if await pointless(ctx):
+                return 
+                
+            if question is None:
+                return await usage(ctx, ['question'], ['Why is puberty a thing?'], 'Returns an "honest" answer for your question.')
+            
+            if question.upper().startswith(("WHY", " WHY")):
+                choices = [
+                    'Because why not?',
+                    "Because thor didn't go for the head.",
+                    "Because that's just the reality.",
+                    "Because that's what I want.",
+                    "Because that's just the truth.",
+                    "Because that's the thing everyone wanted.",
+                    "Because that's just really the case."
+                ]
+            else:
+                choices = [
+                    "YES!",
+                    "NO!",
+                    "Lmaooo no",
+                    "Hell yes",
+                    "NAhhhh"
+                ]
+
+            await Embed(ctx, question, random.choice(choices))
+
+        except Exception as e:
+            await botError(self.bot, ctx, e)
     
     @commands.command(name="8ball")
     async def ball8(self, ctx, *, question: str = None):
