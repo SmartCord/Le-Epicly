@@ -400,7 +400,7 @@ class FunCommands:
                 return await usage(ctx, ['title', 'attach an image file (Attachment, not a link)'], ['this guy drunk lmao', '*attaches an image of a drunk kid*'], 'Lets you upload a meme. Duh')
 
 
-            url = ctx.message.attachments[0]
+            url = ctx.message.attachments[0].url
             images_suffix = ('png', 'jpg', 'jpeg')
             if not url.endswith(images_suffix):
                 e = discord.Embed(title="Attachment not an image", description="Your attachment should be an image.", color=color())
