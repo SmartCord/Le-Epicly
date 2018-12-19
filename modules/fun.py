@@ -420,7 +420,8 @@ class FunCommands:
             image.save(f, 'png')
             f.seek(0)
             channel = self.bot.get_channel(522261757817913354)
-            await channel.send(file=discord.File(f, 'cool.png'), content=f"ID : {id}")
+            msg = await channel.send(file=discord.File(f, 'cool.png'), content=f"ID : {id}")
+            image = msg.attachments[0].url 
 
 
             data = {
