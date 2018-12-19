@@ -412,7 +412,7 @@ class FunCommands:
 
             async with aiohttp.ClientSession() as cs:
                 async with cs.get(url) as rp:
-                    content = rp.content.read()
+                    content = await rp.content.read()
             
             image = BytesIO(content)
             image = Image.open(image).convert('RGBA')
