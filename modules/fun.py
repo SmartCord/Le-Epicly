@@ -396,7 +396,7 @@ class FunCommands:
             if title is None:
                 return await usage(ctx, ['title', 'attach an image file (Attachment, not a link)'], ['this guy drunk lmao', '*attaches an image of a drunk kid*'], 'Lets you upload a meme. Duh')
 
-            if ctx.message.attachments = []:
+            if ctx.message.attachments == []:
                 return await usage(ctx, ['title', 'attach an image file (Attachment, not a link)'], ['this guy drunk lmao', '*attaches an image of a drunk kid*'], 'Lets you upload a meme. Duh')
 
 
