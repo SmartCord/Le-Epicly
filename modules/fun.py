@@ -9,7 +9,7 @@ class FunCommands:
         try:
             if await pointless(ctx):
                 return 
-                
+
             if question is None:
                 return await usage(ctx, ['question'], ['Why is puberty a thing?'], 'Returns an "honest" answer for your question.')
             
@@ -388,100 +388,50 @@ class FunCommands:
 
     @commands.command() # 30 points
     @commands.cooldown(2, 15, commands.BucketType.user)
-    async def upload_meme(self, ctx, url: str = None):
+    async def upload_meme(self, ctx, *, title: str = None):
         try:
             if await pointless(ctx):
                 return
 
-            if url is None:
-                return await usage(ctx, ['reddit url'], ['https://www.reddit.com/r/dankmemes/comments/a372j6/bring_home_the_bagels/'], 'Lets you upload a meme to the overtimed meme database. (Only reddit links are currently supported for now)')
+            if title is None:
+                return await usage(ctx, ['title', 'attach an image file (Attachment, not a link)'], ['this guy drunk lmao', '*attaches an image of a drunk kid*'], 'Lets you upload a meme. Duh')
 
-            if not url.startswith('https://www.reddit.com/r/'):
-                if url.startswith('https://www.reddit.com/u/'):
-                    return await error(ctx, "Invalid URL", "Please provide a reddit post url not a user one.")
-                return await error(ctx, "Invalid URL", "Please provide a reddit post url.")
-
-            if not url.endswith('/'):
-                url += "/"
+            if ctx.message.attachments = []:
+                return await usage(ctx, ['title', 'attach an image file (Attachment, not a link)'], ['this guy drunk lmao', '*attaches an image of a drunk kid*'], 'Lets you upload a meme. Duh')
 
 
-            # proxies = utils.get_proxies()
-            #chosen = random.choice(proxies)
-            # connection = False
-            # for chosen in proxies:
-                # user_agent = random.choice(utils.user_agents)
-                # proxy = {
-                    # "http": f'http://{chosen}',
-                    # "https": f'http://{chosen}'
-                # }
-                # try:
-                    # r = requests.get(url, headers=user_agent, proxies=proxy)
-                    # break #lol
-                # except:
-                    # pass
-
-
-            user_agent = random.choice(utils.user_agents)
-            r = requests.get(url, headers=user_agent)
-
-            page = r.text
-            soup = bsoup(page, 'html.parser')
-            source = url
-            uploaded_by = ctx.author.id
-            id = str(uuid.uuid4())
-            channel_to_send = self.bot.get_channel(522261757817913354)
-            try:
-                title = soup.find('span', attrs={'class':'y8HYJ-y_lTUHkQIc1mdCq'}).text
-                image = soup.find('div', attrs={'class':'_3Oa0THmZ3f5iZXAQ0hBJ0k'})
-                image = image.find('a')
-                image = image['href']
-            except:
-                try:
-                    source_id = source.split('comments/')[1].split('/')[0]
-                    submission = reddit.submission(id=source_id)
-                    title = submission.title
-                    image = submission.url
-                except:
-                    return await error(ctx, "Invalid URL", "The reddit post you provided is invalid.") #
-
-            if db.memes.count({"source":source}):
-                meme = [x['uploaded_by'] for x in db.memes.find({"source":source})][0]
-                e = discord.Embed(color=color())
-                if meme == "KSoft API":
-                    e.title = "Oops an API have already uploaded that :("
-                    e.description = "Sad to say but KSoft API have already uploaded that meme."
-                elif meme == ctx.author.id:
-                    e.title = "You already uploaded that..."
-                    e.description = f"Sorry but you have already uploaded that meme."
-                elif isinstance(meme, int):
-                    user = discord.utils.get(self.bot.get_all_members(), id=meme)
-                    if user is None:
-                        e.title = "That meme has already been uploaded by an unknown user"
-                        e.description = f"Unfortunately an unknown user with the id `{meme}` have already uploaded that meme."
-                    else:
-                        e.title = f"That meme has already been uploaded by {user}"
-                        e.description = f"Sorry but {user} have already uploaded that meme. Better luck next time :)"
+            url = ctx.message.attachments[0]
+            images_suffix = ('png', 'jpg', 'jpeg')
+            if not url.endswith(images_suffix):
+                e = discord.Embed(title="Attachment not an image", description="Your attachment should be an image.", color=color())
+                e.set_thumbnail(url=ctx.me.avatar_url)
                 footer(ctx, e)
-                e.set_thumbnail(url=ctx.author.avatar_url)
                 return await ctx.send(embed=e)
+
+            id = str(uuid.uuid4())
+
+            async with aiohttp.ClientSession() as cs:
+                async with cs.get(url) as rp:
+                    content = rp.content 
+            
+            image = BytesIO(content)
+            image = Image.open(image).convert('RGBA')
+            f = BytesIO()
+            image.save(f, 'png')
+            f.seek(0)
+            channel = self.bot.get_channel(522261757817913354)
+            await channel.send(file=discord.File(f, 'cool.png'), content=f"ID : {id}")
+
 
             data = {
                 'id':id,
                 'title':title,
-                'source':source,
                 'image':image,
-                'uploaded_by':uploaded_by
+                'uploaded_by':ctx.author.id
             }
             db.memes.insert_one(data)
-
-            await success(ctx, f"Successfully uploaded that [cool meme]({source}) to the meme database.", image)
+            await success(ctx, f"Successfully uploaded that cool meme to the meme database.", image)
             uploaded = len([x for x in db.memes.find({"uploaded_by":ctx.author.id})])
-            author = discord.utils.get(self.bot.get_all_members(), id=data['uploaded_by'])
-            e = discord.Embed(title=data['title'], url=data['source'], color=color())
-            e.set_thumbnail(url=author.avatar_url)
-            e.set_image(url=data['image'])
-            e.set_footer(text=data['id'])
-            await channel_to_send.send(embed=e)
             if uploaded == 10:
                 await giveAchievement(ctx.author, 2, extra="for uploading 10 memes")
 

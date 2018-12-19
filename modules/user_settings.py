@@ -40,6 +40,7 @@ class UserSettings:
     @commands.command()
     async def get_token(self, ctx):
         try:
+            
             if not db.auths.count_documents({"user_id":ctx.author.id}):
                 e = discord.Embed(title="Oops you don't have that yet", description=f"Sorry but you have not yet created a token. You can create a token using the `{prefix(ctx)}create_token` command.\n\nWhat are tokens used for?\nTokens are used so that you can access the web dashboard of Overtimed.\nAll you have to do is create your token and go the overtimed website and click log in.\n\nOnce you click log in the bot will then ask you to put your token in.\nAfter that you can now access the web dashboard and you no longer have to put a token the next time you visit the website.", color=color())
                 e.set_thumbnail(url=ctx.me.avatar_url)
