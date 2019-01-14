@@ -1,6 +1,5 @@
 import traceback, discord
 import datetime, random
-from tools.bot_tools import db
 from lxml.html import fromstring
 import requests
 from difflib import SequenceMatcher
