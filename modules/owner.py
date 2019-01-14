@@ -277,7 +277,6 @@ Updating the database, Total memes = {total};
             env = {
                 'self':self,
                 'ctx':ctx,
-                'db':db,
                 'discord':discord
             }
             env.update(globals())
