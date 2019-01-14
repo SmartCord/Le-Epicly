@@ -1,7 +1,7 @@
 from discord.ext import commands
 from tools import utils, config
 from bs4 import BeautifulSoup as bsoup
-from tools.bot_tools import db, reddit
+from tools.bot_tools import reddit
 import paginator, string , pickle
 from pathlib import Path
 import random, requests, asyncio, discord, time, ast, io, traceback, textwrap, aiohttp, uuid
