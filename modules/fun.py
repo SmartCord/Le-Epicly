@@ -428,7 +428,9 @@ class FunCommands:
                 'id':id,
                 'title':title,
                 'image':image,
-                'uploaded_by':ctx.author.id
+                'uploaded_by':ctx.author.id,
+                'likes':0,
+                'dislikes':0
             }
             db.memes.insert_one(data)
             await success(ctx, f"Successfully uploaded that cool meme to the meme database.", image)
@@ -451,7 +453,7 @@ class FunCommands:
             embeds = []
             for y in db.meme_collection.find({"user_id":ctx.author.id}):
                 for x in db.memes.find({"id":y['id']}):
-                    e = discord.Embed(title=x['title'], url=x['source'], color=color())
+                    e = discord.Embed(title=x['title'], color=color())
                     e.set_image(url=x['image'])
                     footer(ctx, e)
                     embeds.append(e)

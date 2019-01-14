@@ -11,8 +11,7 @@ class LeEpic(commands.AutoShardedBot):
         self.loads_xd = []
 
     async def _get_shagger_prefix(self, bot, message):
-        prefix = utils.prefix(message)
-        return commands.when_mentioned_or(prefix)(bot, message)
+        return "!."
 
     async def load_modules(self):
         await self.wait_until_ready()
